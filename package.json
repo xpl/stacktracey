@@ -1,0 +1,35 @@
+{
+  "name": "stacktracey",
+  "version": "1.0.10",
+  "description": "Parses call stacks, reads sources and meta-information.",
+  "main": "stacktracey",
+  "scripts": {
+    "test": "./node_modules/.bin/supervisor -n exit -x ./node_modules/.bin/mocha -- --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xpl/stacktracey.git"
+  },
+  "keywords": [
+    "stack",
+    "stacktrace",
+    "callstack",
+    "call stack",
+    "source lines",
+    "error",
+    "stack parse"
+  ],
+  "author": "Vitaly Gordon <rocket.mind@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xpl/stacktracey/issues"
+  },
+  "homepage": "https://github.com/xpl/stacktracey",
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "supervisor": "^0.11.0"
+  },
+  "dependencies": {
+    "es7-object-polyfill": "0.0.1"
+  }
+}
