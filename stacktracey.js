@@ -30,7 +30,7 @@ class StackTracey extends Array {
     /*  new StackTracey (string)     */
 
         if (typeof input === 'string') {
-            input = StackTracey.rawParse (input).slice (1).map (StackTracey.extractEntryMetadata) }
+            input = StackTracey.rawParse (input).slice (offset).map (StackTracey.extractEntryMetadata) }
 
     /*  new StackTracey (array)      */
 
