@@ -86,7 +86,7 @@ This will return item supplied with source code info (already mapped through sou
 }
 ```
 
-To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get-source) docs.
+To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get-source#get-source) docs.
 
 ## Warning
 
