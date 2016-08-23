@@ -1,7 +1,5 @@
 # StackTracey
 
-**ATTENTION: WORK IN PROGRESS (NOT WELL TESTED IN BROWSERS YET)**
-
 Platform-agnostic callstack access helper.
 
 ## Why
