@@ -30,7 +30,6 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
-    "get-source": "^1.0.3",
-    "source-map": "^0.5.6"
+    "get-source": "^1.0.3"
   }
 }
