@@ -4,10 +4,10 @@ Platform-agnostic callstack access helper.
 
 ## Why
 
-- Simple
-- Provides source text for call locations
-- Fetches sources synchronously, via [get-source](https://github.com/xpl/get-source)
-- Full sourcemap support
+- [x] Simple
+- [x] Provides source text for call locations
+- [x] Fetches sources synchronously, via [get-source](https://github.com/xpl/get-source)
+- [x] Full sourcemap support
 
 ## What for
 
