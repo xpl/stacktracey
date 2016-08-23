@@ -56,6 +56,8 @@ describe ('StackTracey', () => {
 
         const cleanStack = stack.clean
 
+        cleanStack.should.be.an.instanceof (StackTracey)
+
         StackTracey.locationsEqual (cleanStack[0], stack[0]).should.equal (true)  // should not clean top element
         StackTracey.locationsEqual (cleanStack[1], stack[1]).should.equal (false) // should clean second element (due to // @hide)
     })
@@ -74,6 +76,8 @@ describe ('StackTracey', () => {
                                                     line: x.line,
                                                     callee: x.callee,
                                                     calleeShort: x.calleeShort }))
+
+        clean.should.be.an.instanceof (StackTracey)
 
         clean.should.deep.equal ([
             { file: 'yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
@@ -98,6 +102,8 @@ describe ('StackTracey', () => {
 
         deltaLength.should.equal (1)
         sliced.should.be.an.instanceof (StackTracey)
+
+        sliced.filter (x => true).should.be.an.instanceof (StackTracey)
     })
 })
 

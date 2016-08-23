@@ -107,16 +107,10 @@ stack = stack.clean
 
 ## Array methods
 
-Note that `.map`, `.filter` (and other `Array` methods) will return `Array` instances, not `StackTracey` instances. You can convert arrays to `StackTracey` instances via this:
+`StackTracey` instances expose `map`, `filter` and `slice` methods. These methods will return mapped, filtered and sliced `StackTracey` instances, respectively. All other methods of `Array` are supported too, but they will return `Array` instances, not `StackTracey` instances. You can convert arrays via this:
 
 ```javascript
-cleanStack = new StackTracey (stack.filter (x => !x.isThirdParty))
-```
-
-For convenience, there's a `slice` method that comes with that behavior built in:
-
-```javascript
-shiftedStack = stack.slice (3)
+stack = new StackTracey (array)
 ```
 
 ## Extra stuff

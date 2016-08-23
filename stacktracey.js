@@ -135,6 +135,14 @@ class StackTracey extends Array {
                (a.column === b.column)
     }
 
+    map (fn) {
+        return new StackTracey (Array.prototype.map.call (this, fn))
+    }
+
+    filter (fn) {
+        return new StackTracey (Array.prototype.filter.call (this, fn))
+    }
+
     slice (begin, end) {
         return new StackTracey (Array.prototype.slice.call (this, begin, end))
     }
