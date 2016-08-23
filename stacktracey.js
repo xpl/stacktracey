@@ -97,7 +97,7 @@ class StackTracey extends Array {
 
     static withSource (loc) {
 
-        if (loc.file.indexOf ('<') >= 0) { // ignore things like <anonymous>
+        if (loc.sourceFile || (loc.file.indexOf ('<') >= 0)) { // skip things like <anonymous> and stuff that was already fetched
             return loc }
 
         else {
