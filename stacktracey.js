@@ -30,14 +30,14 @@ class StackTracey extends Array {
     /*  new StackTracey (string)     */
 
         if (typeof input === 'string') {
-            input = StackTracey.rawParse (input).map (StackTracey.extractEntryMetadata) }
+            input = StackTracey.rawParse (input).slice (1).map (StackTracey.extractEntryMetadata) }
 
     /*  new StackTracey (array)      */
 
         if (Array.isArray (input)) {
 
             this.length = input.length
-            input.slice (offset).forEach ((x, i) => this[i] = x) }
+            input.forEach ((x, i) => this[i] = x) }
     }
 
     static extractEntryMetadata (e) { const short = StackTracey.shortenPath (e.file)
@@ -133,6 +133,10 @@ class StackTracey extends Array {
         return (a.file   === b.file) &&
                (a.line   === b.line) &&
                (a.column === b.column)
+    }
+
+    slice (begin, end) {
+        return new StackTracey (Array.prototype.slice.call (this, begin, end))
     }
 }
 

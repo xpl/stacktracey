@@ -89,6 +89,16 @@ describe ('StackTracey', () => {
               stack.withSources[0].sourceLine.should.equal ('')
               stack.withSources[0].error.should.be.an.instanceof (Error)
     })
+
+    it ('exposes some Array methods', () => {
+
+        const stack = shouldBeVisibleInStackTrace ()
+        const sliced = stack.slice (1)
+        const deltaLength = (stack.length - sliced.length)
+
+        deltaLength.should.equal (1)
+        sliced.should.be.an.instanceof (StackTracey)
+    })
 })
 
 
