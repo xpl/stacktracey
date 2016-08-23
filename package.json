@@ -4,7 +4,7 @@
   "description": "Parses call stacks, reads sources and meta-information.",
   "main": "stacktracey",
   "scripts": {
-    "test": "./node_modules/.bin/supervisor -n exit -x ./node_modules/.bin/mocha -- --reporter spec"
+    "test": "./node_modules/.bin/mocha --reporter spec --watch"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "stacktrace",
     "callstack",
     "call stack",
-    "source lines",
+    "read sources",
     "error",
     "stack parse"
   ],
@@ -26,10 +26,11 @@
   },
   "homepage": "https://github.com/xpl/stacktracey",
   "devDependencies": {
-    "mocha": "^2.4.5",
-    "supervisor": "^0.11.0"
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   },
   "dependencies": {
-    "es7-object-polyfill": "0.0.1"
+    "get-source": "^1.0.1",
+    "source-map": "^0.5.6"
   }
 }

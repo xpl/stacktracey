@@ -1,27 +1,51 @@
-StackTracey = require ('./stacktracey')
-assert      = require ('assert')
+"use strict";
+
+/*  ------------------------------------------------------------------------ */
+                    
+require ('chai').should ()
+
+/*  ------------------------------------------------------------------------ */
 
 describe ('StackTracey', () => {
 
-    it ('works', () => {
+    const StackTracey = require ('./stacktracey')
 
-        function shouldBeVisibleInStackTrace () { return new StackTracey () }
+    const shouldBeVisibleInStackTrace = () => new StackTracey ()
+
+    it ('works', () => {
 
         const stack = shouldBeVisibleInStackTrace ()
 
-        assert.deepEqual (stack[0], {
-            beforeParse: 'at shouldBeVisibleInStackTrace (' + process.cwd () + '/test.js:8:58)',
+        stack.should.be.an.instanceof (Array)
+
+        stack[0].should.deep.equal ({
+            beforeParse: 'at shouldBeVisibleInStackTrace (' + process.cwd () + '/test.js:13:47)',
             callee: 'shouldBeVisibleInStackTrace',
             index: false,
             native: false,
             file: process.cwd () + '/test.js',
-            line: 8,
-            column: 58,
+            line: 13,
+            column: 47,
             calleeShort: 'shouldBeVisibleInStackTrace',
             fileName: 'test.js',
             fileShort: 'test.js',
             thirdParty: false
         })
+    })
+
+    it ('allows to read sources', () => {
+
+        const stack = shouldBeVisibleInStackTrace ().withSources
+              stack.should.be.an.instanceof (StackTracey)
+              stack[0].sourceLine.should.equal ('    const shouldBeVisibleInStackTrace = () => new StackTracey ()')
+    })
+
+    it ('handles inaccessible files', () => {
+
+        const stack = shouldBeVisibleInStackTrace ()
+              stack[0].file = '^___^'
+              stack.withSources[0].sourceLine.should.equal ('')
+              stack.withSources[0].error.should.be.an.instanceof (Error)
     })
 })
 
