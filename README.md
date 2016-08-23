@@ -67,7 +67,7 @@ Each item exposes:
 
 Accessing sources:
 
-```
+```javascript
 stack.withSources[0] // stack.withSources will return a copy of stack with all items supplied with sources
 stack.withSource (0)
 StackTracey.withSource (stack[0])
@@ -75,7 +75,7 @@ StackTracey.withSource (stack[0])
 
 This will return item supplied with source code info (already mapped through sourcemaps):
 
-```
+```javascript
 {
 	... // all previous fields
 
@@ -92,6 +92,6 @@ To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get
 
 Note that `.map`, `.filter` (and other `Array` methods) will return `Array` instances, not `StackTracey` instances. You can convert arrays to `StackTracey` instances via this:
 
-```
+```javascript
 cleanStack = new StackTracey (stack.filter (x => !x.isThirdParty))
 ```
