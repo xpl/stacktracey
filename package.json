@@ -1,6 +1,6 @@
 {
   "name": "stacktracey",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Parses call stacks, reads sources and meta-information.",
   "main": "stacktracey",
   "scripts": {
