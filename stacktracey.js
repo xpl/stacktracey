@@ -5,7 +5,8 @@
 const O            = Object,
       isBrowser    = (typeof window !== 'undefined') && (window.window === window) && window.navigator,
       lastOf       = x => x[x.length - 1],
-      getSource    = require ('get-source')
+      getSource    = require ('get-source'),
+      partition    = require ('./impl/partition')
 
 /*  ------------------------------------------------------------------------ */
 
@@ -95,13 +96,43 @@ class StackTracey extends Array {
     }
 
     static withSource (loc) {
-        return (loc.file.indexOf ('<') >= 0) // ignore things like <anonymous>
-                    ? loc
-                    : O.assign ({}, loc, getSource (loc.file).resolve (loc))
+
+        if (loc.file.indexOf ('<') >= 0) { // ignore things like <anonymous>
+            return loc }
+
+        else {
+            const resolved = getSource (loc.file).resolve (loc)
+
+            if (resolved.sourceLine.includes ('// @hide')) {
+                resolved.sourceLine = resolved.sourceLine.replace ('// @hide', '')
+                resolved.hide = true }
+
+            return O.assign ({}, loc, resolved)
+        }
     }
 
     get withSources () {
         return new StackTracey (this.map (StackTracey.withSource))
+    }
+
+    get mergeRepeatedLines () {
+        return new StackTracey (
+            partition (this, e => e.file + e.line).map (
+                group => {
+                    return group.items.slice (1).reduce ((memo, entry) => {
+                        memo.callee      = (memo.callee      || '<anonymous>') + ' → ' + (entry.callee      || '<anonymous>')
+                        memo.calleeShort = (memo.calleeShort || '<anonymous>') + ' → ' + (entry.calleeShort || '<anonymous>')
+                        return memo }, O.assign ({}, group.items[0])) }))
+    }
+
+    get clean () {
+        return this.withSources.mergeRepeatedLines.filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide))
+    }
+
+    static locationsEqual (a, b) {
+        return (a.file   === b.file) &&
+               (a.line   === b.line) &&
+               (a.column === b.column)
     }
 }
 

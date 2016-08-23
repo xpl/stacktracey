@@ -5,6 +5,7 @@ Platform-agnostic callstack access helper.
 ## Why
 
 - [x] Simple
+- [x] Allows hiding library calls / ad-hoc exclusion (via `// @hide` marker)
 - [x] Provides source text for call locations
 - [x] Fetches sources synchronously, via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
@@ -61,16 +62,22 @@ Each item exposes:
 
     index:          /* true if occured in HTML file at index page   */,
     native:         /* true if occured in native browser code       */,
-    thirdParty:     /* true if occured in library code              */
+    thirdParty:     /* true if occured in library code              */,
+    hide:           /* true if marked as hidden by "// @hide" tag   */
 }
 ```
 
 Accessing sources:
 
+```
+stack = stack.withSources // will return a copy of stack with all items supplied with sources
+top   = stack[0]
+```
 ```javascript
-stack.withSources[0] // stack.withSources will return a copy of stack with all items supplied with sources
-stack.withSource (0)
-StackTracey.withSource (stack[0])
+top = stack.withSource (0) // supplies source for an individiual item
+```
+```javascript
+top = StackTracey.withSource (stack[0]) // supplies source for an individiual item
 ```
 
 This will return item supplied with source code info (already mapped through sourcemaps):
@@ -88,10 +95,28 @@ This will return item supplied with source code info (already mapped through sou
 
 To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get-source#get-source) docs.
 
+## Cleaning output
+
+```
+stack = stack.clean
+```
+
+1. Merges repeated lines (via `.mergeRepeatedLines`)
+2. Excludes locations marked with `isThirdParty` (library calls)
+3. Excludes locations marked with `// @hide` comment (user defined exclusion)
+
 ## Warning
 
 Note that `.map`, `.filter` (and other `Array` methods) will return `Array` instances, not `StackTracey` instances. You can convert arrays to `StackTracey` instances via this:
 
 ```javascript
 cleanStack = new StackTracey (stack.filter (x => !x.isThirdParty))
+```
+
+## Extra stuff
+
+You can compare two locations via this predicate (tests `file`, `line` and `column` for equality):
+
+```
+StackTracey.locationsEqual (a, b)
 ```
