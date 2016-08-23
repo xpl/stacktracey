@@ -11,9 +11,9 @@ Platform-agnostic callstack access helper.
 
 ## What for
 
-- Better exception reporting for Node and browsers
-- Advanced logging (displaying call locations)
-- Assertion printing
+- [x] Better exception reporting for Node and browsers
+- [x] Advanced logging (displaying call locations)
+- [x] Assertion printing
 
 ## How to
 
