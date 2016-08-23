@@ -53,15 +53,15 @@ Each item exposes:
     beforeParse: <original text>,
     callee:      <function name>,
     calleeShort: <shortened function name>,
-    file:        <full path to file>,		// e.g. /Users/john/my_project/src/foo.js
+    file:        <full path to file>,       // e.g. /Users/john/my_project/src/foo.js
     fileShort:   <shortened path to file>,  // e.g. src/foo.js
-    fileName:    <file name>',				// e.g. foo.js
+    fileName:    <file name>',              // e.g. foo.js
     line:        <line number>,             // starts from 1
     column:      <column number>,           // starts from 1
 
-    index: 			/* true if occured in HTML file at index page	*/,
-    native: 		/* true if occured in native browser code  	    */,
-    thirdParty:		/* true if occured in library code			    */
+    index:          /* true if occured in HTML file at index page   */,
+    native:         /* true if occured in native browser code       */,
+    thirdParty:     /* true if occured in library code              */
 }
 ```
 
@@ -77,7 +77,7 @@ This will return item supplied with source code info (already mapped through sou
 
 ```javascript
 {
-	... // all previous fields
+    ... // all previous fields
 
     line:       <original line number>,
     column:     <original column number>,
