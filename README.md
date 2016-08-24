@@ -98,7 +98,7 @@ To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get
 ## Cleaning output
 
 ```javascript
-stack = stack.withSources.clean // it is important to call .clean after .withSources, otherwise // @hide wouldn't work
+stack = stack.withSources.clean // it is better to call .clean on stacks supplied with sources, to make // @hide magic work
 ```
 
 1. Merges repeated lines (via `.mergeRepeatedLines`)
