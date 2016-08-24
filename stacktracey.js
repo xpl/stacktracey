@@ -103,11 +103,11 @@ class StackTracey extends Array {
         else {
             const resolved = getSource (loc.file).resolve (loc)
 
-            if (resolved.sourceLine.includes ('// @hide')) {
-                resolved.sourceLine = resolved.sourceLine.replace ('// @hide', '')
+            if (resolved.sourceLine && resolved.sourceLine.includes ('// @hide')) {
+                resolved.sourceLine  = resolved.sourceLine.replace  ('// @hide', '')
                 resolved.hide = true }
 
-            return O.assign ({}, loc, resolved)
+            return O.assign ({ sourceLine: '' }, loc, resolved)
         }
     }
 
