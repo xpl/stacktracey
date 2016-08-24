@@ -80,9 +80,9 @@ describe ('StackTracey', () => {
         clean.should.be.an.instanceof (StackTracey)
 
         clean.should.deep.equal ([
-            { file: 'yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
-            { file: 'yo.js',  line: 10, callee: 'foobar.boobar → foobar.boobar', calleeShort: 'foobar → foobar' },
-            { file: 'lol.js', line: 10, callee: '',              calleeShort: '' },
+            { file: process.cwd () + '/yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
+            { file: process.cwd () + '/yo.js',  line: 10, callee: 'foobar.boobar → foobar.boobar', calleeShort: 'foobar → foobar' },
+            { file: process.cwd () + '/lol.js', line: 10, callee: '',              calleeShort: '' },
         ])
     })
 
@@ -104,6 +104,15 @@ describe ('StackTracey', () => {
         sliced.should.be.an.instanceof (StackTracey)
 
         sliced.filter (x => true).should.be.an.instanceof (StackTracey)
+    })
+
+    it ('shortens path correctly', () => {
+
+        StackTracey.shortenPath  ('webpack:///~/jquery/dist/jquery.js')
+                   .should.equal (           '~/jquery/dist/jquery.js')
+
+        StackTracey.shortenPath  ('webpack:/webpack/bootstrap')
+                   .should.equal (         'webpack/bootstrap')
     })
 })
 

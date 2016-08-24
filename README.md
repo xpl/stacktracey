@@ -105,6 +105,12 @@ stack = stack.clean
 2. Excludes locations marked with `isThirdParty` (library calls)
 3. Excludes locations marked with `// @hide` comment (user defined exclusion)
 
+You can override `isThirdParty` behaviour by replacing the predicate implementation:
+
+```
+StackTracey.isThirdParty = path => path.includes ('jquery')
+```
+
 ## Array methods
 
 `StackTracey` instances expose `map`, `filter` and `slice` methods. These methods will return mapped, filtered and sliced `StackTracey` instances, respectively. All other methods of `Array` are supported too, but they will return `Array` instances, not `StackTracey` instances. You can convert arrays via this:
@@ -117,6 +123,6 @@ stack = new StackTracey (array)
 
 You can compare two locations via this predicate (tests `file`, `line` and `column` for equality):
 
-```
+```javascript
 StackTracey.locationsEqual (a, b)
 ```

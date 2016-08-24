@@ -20,12 +20,12 @@ class StackTracey extends Array {
 
         if (!input) {
              input = new Error ()
-             offset = isBrowser ? 0 : 1 }
+             offset = (offset === undefined) ? 1 : offset }
 
     /*  new StackTracey (Error)      */
 
         if (input instanceof Error) {
-            input = input.stack || '' }
+            input = input[StackTracey.stack] || input.stack || '' }
 
     /*  new StackTracey (string)     */
 
@@ -40,22 +40,31 @@ class StackTracey extends Array {
             input.forEach ((x, i) => this[i] = x) }
     }
 
-    static extractEntryMetadata (e) { const short = StackTracey.shortenPath (e.file)
+    static extractEntryMetadata (e) {
 
-        return O.assign (e, {
+        return StackTracey.updateEntryFilePath (O.assign (e, {
 
             calleeShort:    lastOf (e.callee.split ('.')),
-            fileName:       lastOf (e.file  .split ('/')),
-            fileShort:      short,
-            thirdParty:     StackTracey.isThirdParty (short) && !e.index })
+            fileName:       lastOf (e.file  .split ('/')) }))
     }
 
-    static shortenPath (path) {
-        return path.replace (isBrowser ? window.location.href : (process.cwd () + '/'), '')
+    static updateEntryFilePath (e) { const short = StackTracey.shortenPath (e.file)
+
+        return O.assign (e, {
+            fileShort:  short,
+            thirdParty: StackTracey.isThirdParty (short) && !e.index
+        })
+    }
+
+    static shortenPath (s) {
+        return s.replace (isBrowser ? window.location.href : (process.cwd () + '/'), '')
+                .replace (/^.*\:\/\/?\/?/, '')
     }
 
     static isThirdParty (shortPath) {
-        return shortPath.indexOf ('node_modules') === 0
+        return (shortPath[0] === '~')                          || // webpack-specific heuristic
+               (shortPath.indexOf ('node_modules')      === 0) ||
+               (shortPath.indexOf ('webpack/bootstrap') === 0)
     }
 
     static rawParse (str) {
@@ -97,11 +106,15 @@ class StackTracey extends Array {
 
     static withSource (loc) {
 
-        if (loc.sourceFile || (loc.file.indexOf ('<') >= 0)) { // skip things like <anonymous> and stuff that was already fetched
+        if (loc.sourceFile || (loc.file && loc.file.indexOf ('<') >= 0)) { // skip things like <anonymous> and stuff that was already fetched
             return loc }
 
         else {
-            const resolved = getSource (loc.file).resolve (loc)
+            let resolved = getSource (loc.file).resolve (loc)
+
+            if (resolved.sourceFile) {
+                resolved = StackTracey.updateEntryFilePath (O.assign (resolved, { file: resolved.sourceFile.path }))
+            }
 
             if (resolved.sourceLine && resolved.sourceLine.includes ('// @hide')) {
                 resolved.sourceLine  = resolved.sourceLine.replace  ('// @hide', '')
@@ -147,6 +160,11 @@ class StackTracey extends Array {
         return new StackTracey (Array.prototype.slice.call (this, begin, end))
     }
 }
+
+/*  A a private field that an Error instance can expose
+    ------------------------------------------------------------------------ */
+
+StackTracey.stack = (typeof Symbol !== 'undefined') ? Symbol.for ('StackTracey') : '__StackTracey'
 
 /*  ------------------------------------------------------------------------ */
 
