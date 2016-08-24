@@ -98,7 +98,7 @@ To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get
 ## Cleaning output
 
 ```
-stack = stack.clean
+stack = stack.withSources.clean // it is important to call .clean after .withSources, otherwise // @hide wouldn't work
 ```
 
 1. Merges repeated lines (via `.mergeRepeatedLines`)
