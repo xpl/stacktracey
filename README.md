@@ -97,7 +97,7 @@ To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get
 
 ## Cleaning output
 
-```
+```javascript
 stack = stack.withSources.clean // it is important to call .clean after .withSources, otherwise // @hide wouldn't work
 ```
 
@@ -107,13 +107,13 @@ stack = stack.withSources.clean // it is important to call .clean after .withSou
 
 You can override `isThirdParty` behaviour by replacing the predicate implementation:
 
-```
+```javascript
 StackTracey.isThirdParty = path => path.includes ('jquery')
 ```
 
 ## Array methods
 
-`StackTracey` instances expose `map`, `filter` and `slice` methods. These methods will return mapped, filtered and sliced `StackTracey` instances, respectively. All other methods of `Array` are supported too, but they will return `Array` instances, not `StackTracey` instances. You can convert arrays via this:
+StackTracey instances expose `map`, `filter` and `slice` methods. These methods will return mapped, filtered and sliced stacks, respectively. All other methods of `Array` are supported too, but they will return `Array` instances, not StackTracey instances. You can convert arrays via this:
 
 ```javascript
 stack = new StackTracey (array)
