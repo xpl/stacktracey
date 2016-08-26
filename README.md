@@ -111,7 +111,7 @@ You can override `isThirdParty` behaviour by replacing the predicate implementat
 StackTracey.isThirdParty = path => path.includes ('jquery')
 ```
 
-P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after calling `.withSources`), to make `// @hide` magic work, and to make `isThirdParty` work by recognizing proper file names, if your source is compiled from other sources and have a sourcemap attached.
+P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after calling `.withSources`), to make `// @hide` magic work, and to make `isThirdParty` work by recognizing proper file names, if your source is compiled from other sources and has a sourcemap attached.
 
 ## Array methods
 
