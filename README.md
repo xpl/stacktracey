@@ -98,18 +98,20 @@ To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get
 ## Cleaning output
 
 ```javascript
-stack = stack.withSources.clean // it is better to call .clean on stacks supplied with sources, to make // @hide magic work
+stack = stack.withSources.clean
 ```
 
-1. Merges repeated lines (via `.mergeRepeatedLines`)
-2. Excludes locations marked with `isThirdParty` (library calls)
-3. Excludes locations marked with `// @hide` comment (user defined exclusion)
+1. Excludes locations marked with `isThirdParty` (library calls)
+2. Excludes locations marked with `// @hide` comment (user defined exclusion)
+3. Merges repeated lines (via `.mergeRepeatedLines`)
 
 You can override `isThirdParty` behaviour by replacing the predicate implementation:
 
 ```javascript
 StackTracey.isThirdParty = path => path.includes ('jquery')
 ```
+
+P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after calling `.withSources`), to make `// @hide` magic work, and to make `isThirdParty` work by recognizing proper file names, if your source compiled from other sources and have a sourcemap attached.
 
 ## Array methods
 
