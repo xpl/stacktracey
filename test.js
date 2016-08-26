@@ -79,7 +79,8 @@ describe ('StackTracey', () => {
 
         clean.should.be.an.instanceof (StackTracey)
 
-        clean.should.deep.equal ([
+        Array.from (clean).should.deep.equal ([ // .should does not recognize StackTracey as normal array...
+
             { file: process.cwd () + '/yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
             { file: process.cwd () + '/yo.js',  line: 10, callee: 'foobar.boobar → foobar.boobar', calleeShort: 'foobar → foobar' },
             { file: process.cwd () + '/lol.js', line: 10, callee: '',              calleeShort: '' },

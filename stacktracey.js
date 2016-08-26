@@ -63,6 +63,7 @@ class StackTracey extends Array {
 
     static isThirdParty (shortPath) {
         return (shortPath[0] === '~')                          || // webpack-specific heuristic
+               (shortPath[0] === '/')                          || // external source
                (shortPath.indexOf ('node_modules')      === 0) ||
                (shortPath.indexOf ('webpack/bootstrap') === 0)
     }
@@ -147,21 +148,19 @@ class StackTracey extends Array {
                (a.line   === b.line) &&
                (a.column === b.column)
     }
-
-    map (fn) {
-        return new StackTracey (Array.prototype.map.call (this, fn))
-    }
-
-    filter (fn) {
-        return new StackTracey (Array.prototype.filter.call (this, fn))
-    }
-
-    slice (begin, end) {
-        return new StackTracey (Array.prototype.slice.call (this, begin, end))
-    }
 }
 
-/*  A a private field that an Error instance can expose
+/*  Array methods
+    ------------------------------------------------------------------------ */
+
+;['map', 'filter', 'slice', 'concat'].forEach (name => {
+
+    StackTracey.prototype[name] = function (...args) {
+        return new StackTracey (Array.prototype[name].apply (this, args))
+    }
+})
+
+/*  A private field that an Error instance can expose
     ------------------------------------------------------------------------ */
 
 StackTracey.stack = (typeof Symbol !== 'undefined') ? Symbol.for ('StackTracey') : '__StackTracey'

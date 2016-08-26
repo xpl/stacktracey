@@ -113,10 +113,16 @@ StackTracey.isThirdParty = path => path.includes ('jquery')
 
 ## Array methods
 
-StackTracey instances expose `map`, `filter` and `slice` methods. These methods will return mapped, filtered and sliced stacks, respectively. All other methods of `Array` are supported too, but they will return `Array` instances, not StackTracey instances. You can convert arrays via this:
+All StackTracey instances expose `map`, `filter`, `concat` and `slice` methods. These methods will return mapped, filtered and sliced stacks, respectively. Any other method of the `Array` is supported too, it  return `Array` instances, not StackTracey instances. You can convert from array via this:
 
 ```javascript
 stack = new StackTracey (array)
+```
+
+And to array via this (but generally this is not needed, you can pass around StackTracey instances as if they were real Arrays):
+
+```javascript
+Array.from (stack)
 ```
 
 ## Extra stuff
