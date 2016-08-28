@@ -143,3 +143,7 @@ You can compare two locations via this predicate (tests `file`, `line` and `colu
 ```javascript
 StackTracey.locationsEqual (a, b)
 ```
+
+## See also
+
+Check out a fullstack framework that utilizes all this magic for better error reporting: [Useless™](https://github.com/xpl/useless).
