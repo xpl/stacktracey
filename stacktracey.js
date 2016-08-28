@@ -16,6 +16,11 @@ class StackTracey extends Array {
 
         super ()
 
+    /*  Fixes for Safari    */
+
+        this.constructor = StackTracey
+        this.__proto__   = StackTracey.prototype
+
     /*  new StackTracey ()            */
 
         if (!input) {
@@ -143,6 +148,20 @@ class StackTracey extends Array {
         return this.withSources.mergeRepeatedLines.filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide))
     }
 
+    at (i) {
+        return O.assign ({
+
+            beforeParse: '',
+            callee:      '<???>',
+            index:       false,
+            native:      false,
+            file:        '<???>',
+            line:        0,
+            column:      0
+
+        }, this[i])
+    }
+
     static locationsEqual (a, b) {
         return (a.file   === b.file) &&
                (a.line   === b.line) &&
@@ -153,7 +172,7 @@ class StackTracey extends Array {
 /*  Array methods
     ------------------------------------------------------------------------ */
 
-;['map', 'filter', 'slice', 'concat'].forEach (name => {
+;['map', 'filter', 'slice', 'concat', 'reverse'].forEach (name => {
 
     StackTracey.prototype[name] = function (...args) {
         return new StackTracey (Array.prototype[name].apply (this, args))

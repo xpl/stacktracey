@@ -115,7 +115,7 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after c
 
 ## Array methods
 
-All StackTracey instances expose `map`, `filter`, `concat` and `slice` methods. These methods will return mapped, filtered, joined and sliced stacks, respectively.
+All StackTracey instances expose `map`, `filter`, `concat`, `reverse` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced stacks, respectively:
 
 ```javascript
 s = new StackTracey ().slice (1).filter (x => !x.isThirdParty) // current stack shifted by 1 and cleaned from library class
@@ -124,7 +124,7 @@ s instanceof StackTracey // true
 s instanceof Array       // true
 ```
 
-Any other method of the `Array` is supported too, but they will return `Array` instances, not StackTracey instances. You can convert from array via this:
+Other methods of the `Array` are supported too, but they will return `Array` instances, not StackTracey instances. You can convert from array via this:
 
 ```javascript
 stack = new StackTracey (array)
