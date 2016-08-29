@@ -115,6 +115,30 @@ describe ('StackTracey', () => {
         StackTracey.shortenPath  ('webpack:/webpack/bootstrap')
                    .should.equal (         'webpack/bootstrap')
     })
+
+    it ('works with sourcemaps', () => {
+
+        const path = require ('path'),
+              mkay = require ('./test_files/mkay.uglified')
+
+        try {
+            mkay ()
+        }
+        catch (e) {
+
+            e.message.should.equal ('mkay')
+
+            const top = new StackTracey (e).withSources[0]
+
+            top.line        .should.equal (4)
+            top.column      .should.equal (22)
+            top.sourceLine  .should.equal ('\t\t\t\t\tthrow new Error (\'mkay\') }')
+
+            top.file        .should.equal (path.resolve ('./test_files/mkay.js'))
+            top.fileShort   .should.equal ('test_files/mkay.js')
+            top.fileName    .should.equal ('mkay.js')
+        }
+    })
 })
 
 
