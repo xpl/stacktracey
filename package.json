@@ -29,11 +29,9 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-es2017": "^6.14.0",
     "chai": "^3.5.0",
-    "install": "^0.8.1",
-    "mocha": "^2.4.5",
-    "npm": "^3.10.6"
+    "mocha": "^2.4.5"
   },
   "dependencies": {
-    "get-source": "^1.0.5"
+    "get-source": "*"
   }
 }
