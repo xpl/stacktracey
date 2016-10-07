@@ -118,7 +118,7 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after c
 All StackTracey instances expose `map`, `filter`, `concat`, `reverse` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced stacks, respectively:
 
 ```javascript
-s = new StackTracey ().slice (1).filter (x => !x.isThirdParty) // current stack shifted by 1 and cleaned from library class
+s = new StackTracey ().slice (1).filter (x => !x.isThirdParty) // current stack shifted by 1 and cleaned from library calls
 
 s instanceof StackTracey // true
 s instanceof Array       // true
