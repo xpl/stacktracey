@@ -165,6 +165,17 @@ class StackTracey extends Array {
     }
 }
 
+/*  Chaining helper for .isThirdParty
+    ------------------------------------------------------------------------ */
+
+StackTracey.isThirdParty.except = pred => {
+
+    const impl = StackTracey.isThirdParty
+
+    StackTracey.isThirdParty        = path => impl (path) && !pred (path)
+    StackTracey.isThirdParty.except = impl.except
+}
+
 /*  Array methods
     ------------------------------------------------------------------------ */
 
