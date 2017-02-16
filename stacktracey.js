@@ -171,7 +171,7 @@ class StackTracey extends Array {
 ;['map', 'filter', 'slice', 'concat', 'reverse'].forEach (name => {
 
     StackTracey.prototype[name] = function (...args) {
-        return new StackTracey (Array.prototype[name].apply (this, args))
+        return new StackTracey ([...this][name] (...args))
     }
 })
 

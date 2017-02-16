@@ -107,6 +107,19 @@ describe ('StackTracey', () => {
         sliced.filter (x => true).should.be.an.instanceof (StackTracey)
     })
 
+    it ('Array.filter works', () => {
+
+        const stack = new StackTracey ([
+            { file: 'yo.js',  line: 10 },
+            { file: 'lol.js', line: 10 },
+        ])
+
+        const filtered = stack.filter (x => x.file === 'lol.js')
+
+        filtered.length.should.equal (1)
+        filtered[0].should.deep.equal ({ file: 'lol.js', line: 10 })
+    })
+
     it ('shortens path correctly', () => {
 
         StackTracey.shortenPath  ('webpack:///~/jquery/dist/jquery.js')
