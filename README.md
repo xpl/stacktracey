@@ -108,16 +108,10 @@ stack = stack.withSources.clean
 You can augment `isThirdParty` predicate with new rules:
 
 ```javascript
-StackTracey.isThirdParty.include (path => path.includes ('my-lib')) // my-lib paths will  be marked as thirdParty
+StackTracey.isThirdParty.include (path => path.includes ('my-lib')) // paths including 'my-lib' will be marked as thirdParty
 ```
-
 ```javascript
-StackTracey.isThirdParty.except  (path => path.includes ('jquery')) // jquery paths won't be marked as thirdParty
-```
-
-You can add exceptions to the `isThirdParty` predicate:
-
-```javascript
+StackTracey.isThirdParty.except (path => path.includes ('jquery')) // jquery paths won't be marked as thirdParty
 ```
 
 P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after calling `.withSources`), to make `// @hide` magic work, and to make `isThirdParty` work by recognizing proper file names, if your source is compiled from other sources and has a sourcemap attached.
