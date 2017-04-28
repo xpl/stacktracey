@@ -6,7 +6,8 @@ const O            = Object,
       isBrowser    = (typeof window !== 'undefined') && (window.window === window) && window.navigator,
       lastOf       = x => x[x.length - 1],
       getSource    = require ('get-source'),
-      partition    = require ('./impl/partition')
+      partition    = require ('./impl/partition'),
+      asTable      = require ('as-table')
 
 /*  ------------------------------------------------------------------------ */
 
@@ -162,6 +163,14 @@ class StackTracey extends Array {
         return (a.file   === b.file) &&
                (a.line   === b.line) &&
                (a.column === b.column)
+    }
+
+    get pretty () {
+
+        return asTable (this.withSources.map (
+                            e => [  ('at ' + e.calleeShort.slice (0, 30)),
+                                    (e.fileShort && (e.fileShort + ':' + e.line)) || '',
+                                    ((e.sourceLine || '').trim () || '').slice (0, 80)      ]))
     }
 }
 

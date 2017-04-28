@@ -9,6 +9,7 @@ Platform-agnostic callstack access helper.
 - [x] Provides source text for call locations
 - [x] Fetches sources synchronously, via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
+- [x] Pretty printing
 
 ## What for
 
@@ -116,6 +117,27 @@ StackTracey.isThirdParty.except (path => path.includes ('jquery')) // jquery pat
 
 P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after calling `.withSources`), to make `// @hide` magic work, and to make `isThirdParty` work by recognizing proper file names, if your source is compiled from other sources and has a sourcemap attached.
 
+## Pretty printing
+
+```javascript
+const prettyPrintedString = new StackTracey ().pretty
+```
+
+It produces a nice compact table layout, supplied with source lines (if available). You can even replace the default NodeJS exception printer with this!
+
+```
+at shouldBeVisibleInStackTrace     test.js:25                              const shouldBeVisibleInStackTrace = () => new StackTracey ()
+at it                              test.js:100                             const stack = shouldBeVisibleInStackTrace ()                
+at callFn                          node_modules/mocha/lib/runnable.js:326  var result = fn.call(ctx);                                  
+at run                             node_modules/mocha/lib/runnable.js:319  callFn(this.fn);                                            
+at runTest                         node_modules/mocha/lib/runner.js:422    test.run(fn);                                               
+at                                 node_modules/mocha/lib/runner.js:528    self.runTest(function(err) {                                
+at next                            node_modules/mocha/lib/runner.js:342    return fn();                                                
+at                                 node_modules/mocha/lib/runner.js:352    next(suites.pop());                                         
+at next                            node_modules/mocha/lib/runner.js:284    return fn();                                                
+at <anonymous>                     node_modules/mocha/lib/runner.js:320    next(0);                  
+```
+
 ## Array methods
 
 All StackTracey instances expose `map`, `filter`, `concat`, `reverse` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced stacks, respectively:
@@ -146,7 +168,3 @@ You can compare two locations via this predicate (tests `file`, `line` and `colu
 ```javascript
 StackTracey.locationsEqual (a, b)
 ```
-
-## See also
-
-Check out a fullstack framework that utilizes all this magic for better error reporting: [Useless™](https://github.com/xpl/useless).

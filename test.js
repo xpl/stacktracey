@@ -152,6 +152,13 @@ describe ('StackTracey', () => {
             top.fileName    .should.equal ('mkay.js')
         }
     })
+
+    it ('pretty printing works', function prettyTest () {
+
+        const pretty = new StackTracey ().clean.pretty
+
+        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:158    console.log (new StackTracey ().clean.pretty)')
+    })
 })
 
 
