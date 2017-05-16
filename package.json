@@ -4,7 +4,7 @@
   "description": "Parses call stacks, reads sources and meta-information.",
   "main": "stacktracey",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec --watch"
+    "test": "mocha --reporter spec --watch"
   },
   "repository": {
     "type": "git",
