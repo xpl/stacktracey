@@ -103,7 +103,7 @@ class StackTracey extends Array {
     }
 
     withSource (i) {
-        return StackTracey.withSource (this[i])
+        return this[i] && StackTracey.withSource (this[i])
     }
 
     static withSource (loc) {

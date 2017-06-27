@@ -157,7 +157,7 @@ describe ('StackTracey', () => {
 
         const pretty = new StackTracey ().clean.pretty
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:158    console.log (new StackTracey ().clean.pretty)')
+        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:158    const pretty = new StackTracey ().clean.pretty')
     })
 })
 
