@@ -1,5 +1,7 @@
 # StackTracey
 
+[![Build Status](https://travis-ci.org/xpl/stacktracey.svg?branch=master)](https://travis-ci.org/xpl/stacktracey) [![NPM](https://img.shields.io/npm/v/stacktracey.svg)](http://npmjs.com/package/stacktracey)
+
 Platform-agnostic callstack access helper.
 
 ## Why
