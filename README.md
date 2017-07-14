@@ -72,7 +72,7 @@ Each item exposes:
 
 Accessing sources:
 
-```
+```javascript
 stack = stack.withSources // will return a copy of stack with all items supplied with sources
 top   = stack[0]
 ```
