@@ -4,7 +4,8 @@
   "description": "Parses call stacks, reads sources and meta-information.",
   "main": "stacktracey",
   "scripts": {
-    "test": "mocha --reporter spec --watch"
+    "test": "mocha --reporter spec",
+    "autotest": "mocha --reporter spec --watch"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,17 @@
     "call stack",
     "read sources",
     "error",
-    "stack parse"
+    "stack parse",
+    "call stack parsing",
+    "stack parsing",
+    "parse stack",
+    "parse callstack",
+    "parse stacktrace",
+    "parse stack trace",
+    "error stack parse",
+    "Error.stack parse",
+    "stack parser",
+    "error parser"
   ],
   "author": "Vitaly Gordon <rocket.mind@gmail.com>",
   "license": "Unlicense",
@@ -26,8 +37,6 @@
   },
   "homepage": "https://github.com/xpl/stacktracey",
   "devDependencies": {
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-es2017": "^6.14.0",
     "chai": "^3.5.0",
     "mocha": "^2.4.5"
   },

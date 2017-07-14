@@ -1,8 +1,0 @@
-{
-  "presets": ["es2017"],
-  "plugins": [
-  	"transform-es2015-arrow-functions",
-  	"transform-es2015-block-scoping",
-  	"transform-es2015-spread",
-  	"transform-es2015-parameters"]
-}
