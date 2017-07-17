@@ -15,8 +15,8 @@ Platform-agnostic callstack access helper.
 
 ## What for
 
-- Better exception reporting for Node and browsers
-- Advanced logging (displaying call locations)
+- [Better exception reporting](https://github.com/xpl/ololog#pretty-printing-error-instances) for Node and browsers
+- [Advanced logging](https://github.com/xpl/ololog#displaying-call-location) (displaying call locations)
 - Assertion printing
 
 ## How to
@@ -170,3 +170,7 @@ You can compare two locations via this predicate (tests `file`, `line` and `colu
 ```javascript
 StackTracey.locationsEqual (a, b)
 ```
+
+## Applications
+
+- [Ololog](https://github.com/xpl/ololog) — a better `console.log` for the log-driven debugging junkies!
