@@ -1,6 +1,6 @@
 # StackTracey
 
-[![Build Status](https://travis-ci.org/xpl/stacktracey.svg?branch=master)](https://travis-ci.org/xpl/stacktracey) [![NPM](https://img.shields.io/npm/v/stacktracey.svg)](http://npmjs.com/package/stacktracey)
+[![Build Status](https://travis-ci.org/xpl/stacktracey.svg?branch=master)](https://travis-ci.org/xpl/stacktracey) [![Coverage Status](https://coveralls.io/repos/github/xpl/stacktracey/badge.svg)](https://coveralls.io/github/xpl/stacktracey) [![NPM](https://img.shields.io/npm/v/stacktracey.svg)](http://npmjs.com/package/stacktracey) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/xpl/stacktracey.svg)](https://scrutinizer-ci.com/g/xpl/stacktracey/?branch=master)
 
 Platform-agnostic callstack access helper.
 
