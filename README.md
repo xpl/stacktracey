@@ -9,7 +9,7 @@ Platform-agnostic callstack access helper.
 - [x] Simple
 - [x] Allows hiding library calls / ad-hoc exclusion (via `// @hide` marker)
 - [x] Provides source text for call locations
-- [x] Fetches sources synchronously, via [get-source](https://github.com/xpl/get-source)
+- [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
 - [x] Pretty printing
 
