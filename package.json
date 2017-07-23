@@ -1,7 +1,7 @@
 {
   "name": "stacktracey",
   "version": "1.0.51",
-  "description": "Parses call stacks. Reads source lines. Clean & filtered output. Full sourcemap support.",
+  "description": "Parses call stacks. Reads source lines. Clean & filtered output. Full sourcemap support. Platform-agnostic.",
   "main": "stacktracey",
   "scripts": {
     "lint": "eslint stacktracey.js",
