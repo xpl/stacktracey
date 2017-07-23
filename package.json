@@ -38,7 +38,7 @@
   "bugs": {
     "url": "https://github.com/xpl/stacktracey/issues"
   },
-  "homepage": "https://github.com/xpl/stacktracey",
+  "homepage": "https://xpl.github.io/stacktracey",
   "devDependencies": {
     "chai": "^4.1.0",
     "coveralls": "^2.13.1",
