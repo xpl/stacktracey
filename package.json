@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/xpl/stacktracey",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.1.0",
     "coveralls": "^2.13.1",
     "eslint": "^4.2.0",
     "istanbul": "^0.4.5",
