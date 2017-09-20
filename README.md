@@ -74,20 +74,26 @@ Accessing sources:
 
 ```javascript
 stack = stack.withSources // will return a copy of stack with all items supplied with sources
-top   = stack[0]
+top   = stack[0]          // top item
 ```
+
+...or:
+
 ```javascript
 top = stack.withSource (0) // supplies source for an individiual item
 ```
+
+...or:
+
 ```javascript
 top = StackTracey.withSource (stack[0]) // supplies source for an individiual item
 ```
 
-This will return item supplied with source code info (already mapped through sourcemaps):
+It will return an item supplied with the source code info (already mapped through sourcemaps):
 
 ```javascript
 {
-    ... // all previous fields
+    ... // all the previously described fields
 
     line:       <original line number>,
     column:     <original column number>,
