@@ -32,7 +32,7 @@ StackTracey = require ('stacktracey')
 Captures the current call stack:
 
 ```javascript
-stack = new StackTracey ()            // captures current call stack
+stack = new StackTracey ()            // captures the current call stack
 ```
 
 Parses stacks from an `Error` object:
