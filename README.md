@@ -171,6 +171,12 @@ You can compare two locations via this predicate (tests `file`, `line` and `colu
 StackTracey.locationsEqual (a, b)
 ```
 
+Resetting source cache (calls `getSource.resetCache ()`) from [get-source](https://github.com/xpl/get-source):
+
+```javascript
+StackTracey.resetCache ()
+```
+
 ## Applications
 
 - [Ololog](https://github.com/xpl/ololog) — a better `console.log` for the log-driven debugging junkies!

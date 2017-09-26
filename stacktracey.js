@@ -172,6 +172,11 @@ class StackTracey extends Array {
                                     (e.fileShort && (e.fileShort + ':' + e.line)) || '',
                                     ((e.sourceLine || '').trim () || '').slice (0, 80)      ]))
     }
+
+    static resetCache () {
+
+        getSource.resetCache ()
+    }
 }
 
 /*  Chaining helper for .isThirdParty
