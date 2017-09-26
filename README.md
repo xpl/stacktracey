@@ -29,13 +29,13 @@ npm install stacktracey
 StackTracey = require ('stacktracey')
 ```
 
-Captures current call stack:
+Captures the current call stack:
 
 ```javascript
-stack = new StackTracey ()            // captures current call stack
+stack = new StackTracey ()            // captures the current call stack
 ```
 
-Parses stacks from `Error` object:
+Parses stacks from an `Error` object:
 
 ```javascript
 stack = new StackTracey (error)       // parses error.stack
@@ -50,7 +50,7 @@ stack.length           // num entries
 stack[0]               // top
 ```
 
-Each item exposes:
+...where each item exposes:
 
 ```javascript
 {
@@ -74,20 +74,26 @@ Accessing sources:
 
 ```javascript
 stack = stack.withSources // will return a copy of stack with all items supplied with sources
-top   = stack[0]
+top   = stack[0]          // top item
 ```
+
+...or:
+
 ```javascript
 top = stack.withSource (0) // supplies source for an individiual item
 ```
+
+...or:
+
 ```javascript
 top = StackTracey.withSource (stack[0]) // supplies source for an individiual item
 ```
 
-This will return item supplied with source code info (already mapped through sourcemaps):
+It will return an item supplied with the source code info (already mapped through sourcemaps):
 
 ```javascript
 {
-    ... // all previous fields
+    ... // all the previously described fields
 
     line:       <original line number>,
     column:     <original column number>,
@@ -96,7 +102,7 @@ This will return item supplied with source code info (already mapped through sou
 }
 ```
 
-To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get-source#get-source) docs.
+To learn about the `sourceFile` object, read the [get-source](https://github.com/xpl/get-source#get-source) docs.
 
 ## Cleaning output
 
@@ -104,11 +110,11 @@ To learn about `sourceFile` object, read [get-source](https://github.com/xpl/get
 stack = stack.withSources.clean
 ```
 
-1. Excludes locations marked with `isThirdParty` (library calls)
-2. Excludes locations marked with `// @hide` comment (user defined exclusion)
-3. Merges repeated lines (via `.mergeRepeatedLines`)
+1. Excludes locations marked with the `isThirdParty` flag (library calls)
+2. Excludes locations marked with a `// @hide` comment (user defined exclusion)
+3. Merges repeated lines (via the `.mergeRepeatedLines`)
 
-You can augment `isThirdParty` predicate with new rules:
+You can augment the global `isThirdParty` predicate with new rules:
 
 ```javascript
 StackTracey.isThirdParty.include (path => path.includes ('my-lib')) // paths including 'my-lib' will be marked as thirdParty
@@ -117,7 +123,7 @@ StackTracey.isThirdParty.include (path => path.includes ('my-lib')) // paths inc
 StackTracey.isThirdParty.except (path => path.includes ('jquery')) // jquery paths won't be marked as thirdParty
 ```
 
-P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after calling `.withSources`), to make `// @hide` magic work, and to make `isThirdParty` work by recognizing proper file names, if your source is compiled from other sources and has a sourcemap attached.
+P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after the `.withSources`), to make the `// @hide` magic work, and to make third-party recognition work by reading proper file names in case if your source is compiled from other sources (and has a sourcemap attached).
 
 ## Pretty printing
 
