@@ -13,7 +13,7 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 - [x] Full sourcemap support
 - [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
 
-<img width="936" alt="screen shot 2017-09-27 at 13 57 24" src="https://user-images.githubusercontent.com/1707/30910025-dd160de6-a38b-11e7-9297-70f139cd63b8.png">
+<img width="914" alt="screen shot 2017-09-27 at 16 44 17" src="https://user-images.githubusercontent.com/1707/30917073-bbc02ace-a3a3-11e7-8b34-4b8829cd6570.png">
 
 ## What for
 
