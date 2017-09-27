@@ -11,7 +11,9 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 - [x] Provides source text for call locations
 - [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
-- [x] Pretty printing
+- [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
+
+<img width="936" alt="screen shot 2017-09-27 at 13 57 24" src="https://user-images.githubusercontent.com/1707/30910025-dd160de6-a38b-11e7-9297-70f139cd63b8.png">
 
 ## What for
 
@@ -131,7 +133,7 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after t
 const prettyPrintedString = new StackTracey (error).pretty
 ```
 
-It produces a nice compact table layout, supplied with source lines (if available):
+It produces a nice compact table layout, supplied with source lines (if available), thanks to [`as-table`](https://github.com/xpl/as-table):
 
 ```
 at shouldBeVisibleInStackTrace     test.js:25                              const shouldBeVisibleInStackTrace = () => new StackTracey ()
