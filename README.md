@@ -12,8 +12,7 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 - [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
 - [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
-
-<img width="898" alt="screen shot 2017-09-27 at 16 53 46" src="https://user-images.githubusercontent.com/1707/30917345-79899004-a3a4-11e7-8d48-e217e2d5e2cd.png">
+      <img width="898" alt="screen shot 2017-09-27 at 16 53 46" src="https://user-images.githubusercontent.com/1707/30917345-79899004-a3a4-11e7-8d48-e217e2d5e2cd.png">
 
 ## What for
 
