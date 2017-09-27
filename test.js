@@ -107,19 +107,6 @@ describe ('StackTracey', () => {
         sliced.filter (x => true).should.be.an.instanceof (StackTracey)
     })
 
-    it ('Array.filter works', () => {
-
-        const stack = new StackTracey ([
-            { file: 'yo.js',  line: 10 },
-            { file: 'lol.js', line: 10 },
-        ])
-
-        const filtered = stack.filter (x => x.file === 'lol.js')
-
-        filtered.length.should.equal (1)
-        filtered[0].should.deep.equal ({ file: 'lol.js', line: 10 })
-    })
-
     it ('shortens path correctly', () => {
 
         StackTracey.shortenPath  ('webpack:///~/jquery/dist/jquery.js')
@@ -157,7 +144,28 @@ describe ('StackTracey', () => {
 
         const pretty = new StackTracey ().clean.pretty
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:158    const pretty = new StackTracey ().clean.pretty')
+        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:145    const pretty = new StackTracey ().clean.pretty')
+    })
+
+    it ('exposes Array methods', () => {
+
+        const stack = new StackTracey ([
+            { file: 'foo' },
+            { file: 'bar' }
+        ])
+
+        const mapped = stack.map ((x, i) => Object.assign (x, { i }))
+
+        mapped.should.deep.equal ([ { file: 'foo', i: 0 }, { file: 'bar', i: 1 } ])
+        mapped.should.be.an.instanceof (Array)
+        mapped.should.be.an.instanceof (StackTracey)
+
+        stack.reduce ((memo, x) => memo + x.file, '').should.equal ('foobar')
+
+        const filtered = stack.filter (x => x.file === 'bar')
+
+        filtered.length.should.equal (1)
+        filtered[0].should.deep.equal ({ file: 'bar', i: 1 })
     })
 })
 

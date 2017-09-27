@@ -177,6 +177,10 @@ class StackTracey extends Array {
 
         getSource.resetCache ()
     }
+
+    get asArray () {
+
+    }
 }
 
 /*  Chaining helper for .isThirdParty
@@ -208,8 +212,10 @@ class StackTracey extends Array {
 
 ;['map', 'filter', 'slice', 'concat', 'reverse'].forEach (name => {
 
-    StackTracey.prototype[name] = function (...args) {
-        return new StackTracey ([...this][name] (...args))
+    StackTracey.prototype[name] = function (/*...args */) { // no support for ...args in Node v4 :(
+        
+        const arr = Array.from (this)
+        return new StackTracey (arr[name].apply (arr, arguments))
     }
 })
 
