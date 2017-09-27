@@ -11,7 +11,8 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 - [x] Provides source text for call locations
 - [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
-- [x] Pretty printing
+- [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
+      <img width="898" alt="screen shot 2017-09-27 at 16 53 46" src="https://user-images.githubusercontent.com/1707/30917345-79899004-a3a4-11e7-8d48-e217e2d5e2cd.png">
 
 ## What for
 
@@ -128,10 +129,10 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after t
 ## Pretty printing
 
 ```javascript
-const prettyPrintedString = new StackTracey ().pretty
+const prettyPrintedString = new StackTracey (error).pretty
 ```
 
-It produces a nice compact table layout, supplied with source lines (if available). You can even replace the default NodeJS exception printer with this!
+It produces a nice compact table layout, supplied with source lines (if available), thanks to [`as-table`](https://github.com/xpl/as-table):
 
 ```
 at shouldBeVisibleInStackTrace     test.js:25                              const shouldBeVisibleInStackTrace = () => new StackTracey ()
@@ -144,6 +145,13 @@ at next                            node_modules/mocha/lib/runner.js:342    retur
 at                                 node_modules/mocha/lib/runner.js:352    next(suites.pop());                                         
 at next                            node_modules/mocha/lib/runner.js:284    return fn();                                                
 at <anonymous>                     node_modules/mocha/lib/runner.js:320    next(0);                  
+```
+
+You can even replace the default NodeJS exception printer with this! This is how you can do it:
+
+```javascript
+process.on ('uncaughtException',  e => { /* print the stack here */ })
+process.on ('unhandledRejection', e => { /* print the stack here */ })
 ```
 
 ## Array methods
