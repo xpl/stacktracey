@@ -131,7 +131,7 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after t
 const prettyPrintedString = new StackTracey ().pretty
 ```
 
-It produces a nice compact table layout, supplied with source lines (if available). You can even replace the default NodeJS exception printer with this!
+It produces a nice compact table layout, supplied with source lines (if available):
 
 ```
 at shouldBeVisibleInStackTrace     test.js:25                              const shouldBeVisibleInStackTrace = () => new StackTracey ()
@@ -144,6 +144,13 @@ at next                            node_modules/mocha/lib/runner.js:342    retur
 at                                 node_modules/mocha/lib/runner.js:352    next(suites.pop());                                         
 at next                            node_modules/mocha/lib/runner.js:284    return fn();                                                
 at <anonymous>                     node_modules/mocha/lib/runner.js:320    next(0);                  
+```
+
+You can even replace the default NodeJS exception printer with this! This is how you can do it:
+
+```javascript
+process.on ('uncaughtException',  e => { /* print the stack here */ })
+process.on ('unhandledRejection', e => { /* print the stack here */ })
 ```
 
 ## Array methods
