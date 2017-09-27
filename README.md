@@ -128,7 +128,7 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after t
 ## Pretty printing
 
 ```javascript
-const prettyPrintedString = new StackTracey ().pretty
+const prettyPrintedString = new StackTracey (error).pretty
 ```
 
 It produces a nice compact table layout, supplied with source lines (if available):
