@@ -132,7 +132,7 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after t
 const prettyPrintedString = new StackTracey (error).pretty
 ```
 
-It produces a nice compact table layout, supplied with source lines (if available), thanks to [`as-table`](https://github.com/xpl/as-table):
+It produces a nice compact table layout (thanks to [`as-table`](https://github.com/xpl/as-table)), supplied with source lines (if available):
 
 ```
 at shouldBeVisibleInStackTrace     test.js:25                              const shouldBeVisibleInStackTrace = () => new StackTracey ()
