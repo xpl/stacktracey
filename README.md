@@ -194,6 +194,6 @@ StackTracey.resetCache ()
 ## Projects That Use StackTracey
 
 - [Ololog](https://github.com/xpl/ololog) — a better `console.log` for the log-driven debugging junkies!
-- [CCXT](https://github.com/ccxt-dev/ccxt) — a cryptocurrency trading library with 85+ exchanges.
+- [CCXT](https://github.com/ccxt-dev/ccxt) — a cryptocurrency trading library that supports 85+ exchanges
 - [pnpm](https://github.com/ccxt-dev/ccxt) — a fast, disk space efficient package manager (faster than npm and Yarn!)
 
