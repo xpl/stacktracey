@@ -177,7 +177,7 @@ stack = new StackTracey (array)
 Array.from (stack)
 ```
 
-## Extra stuff
+## Extra Stuff
 
 You can compare two locations via this predicate (tests `file`, `line` and `column` for equality):
 
