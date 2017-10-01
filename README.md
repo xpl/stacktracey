@@ -14,13 +14,13 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 - [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
       <img width="898" alt="screen shot 2017-09-27 at 16 53 46" src="https://user-images.githubusercontent.com/1707/30917345-79899004-a3a4-11e7-8d48-e217e2d5e2cd.png">
 
-## What for
+## What For
 
 - [Better exception reporting](https://github.com/xpl/ololog#pretty-printing-error-instances) for Node and browsers
 - [Advanced logging](https://github.com/xpl/ololog#displaying-call-location) (displaying call locations)
 - Assertion printing
 
-## How to
+## How To
 
 ```bash
 npm install stacktracey
@@ -105,7 +105,7 @@ It will return an item supplied with the source code info (already mapped throug
 
 To learn about the `sourceFile` object, read the [get-source](https://github.com/xpl/get-source#get-source) docs.
 
-## Cleaning output
+## Cleaning Output
 
 ```javascript
 stack = stack.withSources.clean
@@ -126,7 +126,7 @@ StackTracey.isThirdParty.except (path => path.includes ('jquery')) // jquery pat
 
 P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after the `.withSources`), to make the `// @hide` magic work, and to make third-party recognition work by reading proper file names in case if your source is compiled from other sources (and has a sourcemap attached).
 
-## Pretty printing
+## Pretty Printing
 
 ```javascript
 const prettyPrintedString = new StackTracey (error).pretty
@@ -154,7 +154,7 @@ process.on ('uncaughtException',  e => { /* print the stack here */ })
 process.on ('unhandledRejection', e => { /* print the stack here */ })
 ```
 
-## Array methods
+## Array Methods
 
 All StackTracey instances expose `map`, `filter`, `concat`, `reverse` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced stacks, respectively:
 
@@ -191,6 +191,9 @@ Resetting source cache (calls `getSource.resetCache ()` from [get-source](https:
 StackTracey.resetCache ()
 ```
 
-## Applications
+## Projects That Use StackTracey
 
 - [Ololog](https://github.com/xpl/ololog) — a better `console.log` for the log-driven debugging junkies!
+- [CCXT](https://github.com/ccxt-dev/ccxt) — a cryptocurrency trading library with 85+ exchanges.
+- [pnpm](https://github.com/ccxt-dev/ccxt) — a fast, disk space efficient package manager (faster than npm and Yarn!)
+
