@@ -75,14 +75,14 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "chai": "^4.1.2",
-    "coveralls": "^2.13.1",
-    "eslint": "^4.7.2",
+    "coveralls": "^2.13.3",
+    "eslint": "^4.8.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.3",
     "nyc": "^11.2.1"
   },
   "dependencies": {
-    "as-table": "^1.0.22",
+    "as-table": "^1.0.30",
     "get-source": "^1.0.21"
   }
 }
