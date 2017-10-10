@@ -82,7 +82,7 @@
     "nyc": "^11.2.1"
   },
   "dependencies": {
-    "as-table": "^1.0.30",
+    "as-table": "^1.0.31",
     "get-source": "^1.0.21"
   }
 }
