@@ -215,7 +215,7 @@ describe ('StackTracey', () => {
 
     it ('.at', () => {
         
-        new StackTracey ().at (0).file.should.equal ('/Users/mac/stacktracey/test.js')
+        new StackTracey ().at (0).file.includes ('stacktracey/test.js').should.equal (true)
     })
 })
 
