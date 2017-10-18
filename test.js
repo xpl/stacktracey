@@ -40,6 +40,7 @@ describe ('StackTracey', () => {
             column: 47,
             calleeShort: 'shouldBeVisibleInStackTrace',
             fileName: 'test.js',
+            fileRelative: 'test.js',
             fileShort: 'test.js',
             thirdParty: false
         })
@@ -48,6 +49,7 @@ describe ('StackTracey', () => {
     it ('allows to read sources', () => {
 
         const stack = shouldBeVisibleInStackTrace ().withSources // @hide
+
               stack.should.be.an.instanceof (StackTracey)
               stack[0].beforeParse.should.not.be.undefined // should preserve previous fields
               stack[0].sourceLine.should.equal ('    const shouldBeVisibleInStackTrace = () => new StackTracey () ')
@@ -107,15 +109,6 @@ describe ('StackTracey', () => {
         sliced.filter (x => true).should.be.an.instanceof (StackTracey)
     })
 
-    it ('shortens path correctly', () => {
-
-        StackTracey.shortenPath  ('webpack:///~/jquery/dist/jquery.js')
-                   .should.equal (           '~/jquery/dist/jquery.js')
-
-        StackTracey.shortenPath  ('webpack:/webpack/bootstrap')
-                   .should.equal (         'webpack/bootstrap')
-    })
-
     it ('works with sourcemaps', () => {
 
         const path = require ('path'),
@@ -144,7 +137,7 @@ describe ('StackTracey', () => {
 
         const pretty = new StackTracey ().clean.pretty
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:145    const pretty = new StackTracey ().clean.pretty')
+        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:138    const pretty = new StackTracey ().clean.pretty')
     })
 
     it ('exposes Array methods', () => {
@@ -166,6 +159,24 @@ describe ('StackTracey', () => {
 
         filtered.length.should.equal (1)
         filtered[0].should.deep.equal ({ file: 'bar', i: 1 })
+    })
+
+    it ('computes relative path correctly', () => {
+        
+        StackTracey.relativePath  ('webpack:///~/jquery/dist/jquery.js')
+                    .should.equal (            '~/jquery/dist/jquery.js')
+
+        StackTracey.relativePath  ('webpack:/webpack/bootstrap')
+                    .should.equal (          'webpack/bootstrap')
+    })
+
+    it ('computes short path correctly', () => {
+
+        StackTracey.shortenPath   ('webpack/bootstrap/jquery/dist/jquery.js')
+                    .should.equal ('jquery/dist/jquery.js')
+
+        StackTracey.shortenPath   ('node_modules/jquery/dist/jquery.js')
+                    .should.equal ('jquery/dist/jquery.js')
     })
 })
 

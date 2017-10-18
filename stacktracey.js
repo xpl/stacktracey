@@ -46,27 +46,35 @@ class StackTracey extends Array {
             input.forEach ((x, i) => this[i] = x) }
     }
 
-    static extractEntryMetadata (e) { const fileShort = StackTracey.shortenPath (e.file)
+    static extractEntryMetadata (e) {
+        
+        const fileRelative = StackTracey.relativePath (e.file)
 
         return O.assign (e, {
 
-            calleeShort: e.calleeShort || lastOf (e.callee.split ('.')),
-            fileShort:   fileShort,
-            fileName:    lastOf (e.file.split ('/')),
-            thirdParty:  StackTracey.isThirdParty (fileShort) && !e.index
+            calleeShort:  e.calleeShort || lastOf (e.callee.split ('.')),
+            fileRelative: fileRelative,
+            fileShort:    StackTracey.shortenPath (fileRelative),
+            fileName:     lastOf (e.file.split ('/')),
+            thirdParty:   StackTracey.isThirdParty (fileRelative) && !e.index
         })
     }
 
-    static shortenPath (s) {
-        return s.replace (isBrowser ? window.location.href : (process.cwd () + '/'), '')
-                .replace (/^.*\:\/\/?\/?/, '')
+    static shortenPath (relativePath) {
+        return relativePath.replace (/^node_modules\//, '')
+                           .replace (/^webpack\/bootstrap\//, '')
     }
 
-    static isThirdParty (shortPath) {
-        return (shortPath[0] === '~')                          || // webpack-specific heuristic
-               (shortPath[0] === '/')                          || // external source
-               (shortPath.indexOf ('node_modules')      === 0) ||
-               (shortPath.indexOf ('webpack/bootstrap') === 0)
+    static relativePath (fullPath) {
+        return fullPath.replace (isBrowser ? window.location.href : (process.cwd () + '/'), '')
+                       .replace (/^.*\:\/\/?\/?/, '')
+    }
+
+    static isThirdParty (relativePath) {
+        return (relativePath[0] === '~')                          || // webpack-specific heuristic
+               (relativePath[0] === '/')                          || // external source
+               (relativePath.indexOf ('node_modules')      === 0) ||
+               (relativePath.indexOf ('webpack/bootstrap') === 0)
     }
 
     static rawParse (str) {
@@ -121,7 +129,8 @@ class StackTracey extends Array {
 
             if (resolved.sourceLine && resolved.sourceLine.includes ('// @hide')) {
                 resolved.sourceLine  = resolved.sourceLine.replace  ('// @hide', '')
-                resolved.hide = true }
+                resolved.hide = true
+            }
 
             return O.assign ({ sourceLine: '' }, loc, resolved)
         }

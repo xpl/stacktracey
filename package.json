@@ -1,6 +1,6 @@
 {
   "name": "stacktracey",
-  "version": "1.0.71",
+  "version": "1.1.71",
   "description": "Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & browsers.",
   "main": "stacktracey",
   "scripts": {
@@ -76,7 +76,7 @@
     "babel-cli": "^6.26.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
-    "eslint": "^4.8.0",
+    "eslint": "^4.9.0",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "nyc": "^11.2.1"

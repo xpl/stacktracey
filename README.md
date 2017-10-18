@@ -55,14 +55,15 @@ stack[0]               // top
 
 ```javascript
 {
-    beforeParse: <original text>,
-    callee:      <function name>,
-    calleeShort: <shortened function name>,
-    file:        <full path to file>,       // e.g. /Users/john/my_project/src/foo.js
-    fileShort:   <shortened path to file>,  // e.g. src/foo.js
-    fileName:    <file name>',              // e.g. foo.js
-    line:        <line number>,             // starts from 1
-    column:      <column number>,           // starts from 1
+    beforeParse:  <original text>,
+    callee:       <function name>,
+    calleeShort:  <shortened function name>,
+    file:         <full path to file>,       // e.g. /Users/john/my_project/node_modules/foobar/main.js
+    fileRelative: <relative path to file>,   // e.g. node_modules/foobar/main.js
+    fileShort:    <short path to file>,      // e.g. foobar/main.js
+    fileName:     <file name>,               // e.g. main.js
+    line:         <line number>,             // starts from 1
+    column:       <column number>,           // starts from 1
 
     index:          /* true if occured in HTML file at index page   */,
     native:         /* true if occured in native browser code       */,
