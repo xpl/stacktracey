@@ -158,6 +158,27 @@ process.on ('uncaughtException',  e => { /* print the stack here */ })
 process.on ('unhandledRejection', e => { /* print the stack here */ })
 ```
 
+## Parsing `SyntaxError` instances
+
+For example, when trying to `require` a file named `test_files/syntax_error.js`, containing this erroneous source lines:
+
+```javascript
+// next line contains a syntax error (not a valid JavaScript)
+foo->bar ()
+```
+
+...the pretty printed call stack for the error thrown would be something like:
+
+```
+at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()
+at it                              test.js:184                   try { require ('./test_files/syntax_error.js') }
+at runCallback                     timers.js:781
+at tryOnImmediate                  timers.js:743
+at processImmediate [as _immediat  timers.js:714
+```
+
+...where the first line is generated from parsing the raw output from the `util.inspect` call in Node. Unfortunately, this won't work in older versions of Node (v4 and below) as these versions can't provide any meaningful information for a `SyntaxError` instance.
+
 ## Array Methods
 
 All StackTracey instances expose `map`, `filter`, `concat`, `reverse` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced stacks, respectively:
