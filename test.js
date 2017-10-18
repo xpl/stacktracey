@@ -179,17 +179,22 @@ describe ('StackTracey', () => {
                     .should.equal ('jquery/dist/jquery.js')
     })
 
-    it ('recognizes SyntaxErrors', () => {
+    const nodeVersion = Number (process.version.match(/^v(\d+\.\d+)/)[1])
+    if (nodeVersion >= 5) {
 
-        try { require ('./test_files/syntax_error.js') }
-        catch (e) {
-            const stack = new StackTracey (e).clean
+        it ('recognizes SyntaxErrors', () => {
 
-            stack[0].syntaxError.should.equal (true)
-            stack[0].column.should.equal (5)
-            stack.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
-        }
-    })
+            try { require ('./test_files/syntax_error.js') }
+            catch (e) {
+
+                const stack = new StackTracey (e).clean
+
+                stack[0].syntaxError.should.equal (true)
+                stack[0].column.should.equal (5)
+                stack.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
+            }
+        })
+    }
 })
 
 

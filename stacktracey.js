@@ -53,14 +53,16 @@ class StackTracey extends Array {
                 const rawLines = module.require ('util').inspect (originalInput).split ('\n')
                     , fileLine = rawLines[0].match (/^([^:]+):(.+)/)
 
-                input.unshift ({
-                    file: fileLine && fileLine[1],
-                    line: fileLine && fileLine[2],
-                    column: rawLines[2].indexOf ('^') + 1,
-                    sourceLine: rawLines[1],
-                    callee: '(syntax error)',
-                    syntaxError: true
-                })
+                if (fileLine) {
+                    input.unshift ({
+                        file: fileLine[1],
+                        line: fileLine[2],
+                        column: (rawLines[2] || '').indexOf ('^') + 1,
+                        sourceLine: rawLines[1],
+                        callee: '(syntax error)',
+                        syntaxError: true
+                    })
+                }
             }
 
             this.length = input.length
