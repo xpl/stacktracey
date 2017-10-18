@@ -56,7 +56,7 @@ class StackTracey extends Array {
                 input.unshift ({
                     file: fileLine && fileLine[1],
                     line: fileLine && fileLine[2],
-                    column: rawLines[2].indexOf ('^'),
+                    column: rawLines[2].indexOf ('^') + 1,
                     sourceLine: rawLines[1],
                     callee: '(syntax error)',
                     syntaxError: true

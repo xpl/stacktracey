@@ -183,8 +183,11 @@ describe ('StackTracey', () => {
 
         try { require ('./test_files/syntax_error.js') }
         catch (e) {
-            new StackTracey (e)[0].syntaxError.should.equal (true)
-            new StackTracey (e).clean.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
+            const stack = new StackTracey (e).clean
+
+            stack[0].syntaxError.should.equal (true)
+            stack[0].column.should.equal (5)
+            stack.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
         }
     })
 })
