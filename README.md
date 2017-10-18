@@ -160,7 +160,7 @@ process.on ('unhandledRejection', e => { /* print the stack here */ })
 
 ## Parsing `SyntaxError` instances
 
-For example, when trying to `require` a file named `test_files/syntax_error.js`, containing this erroneous source lines:
+For example, when trying to `require` a file named `test_files/syntax_error.js`:
 
 ```javascript
 // next line contains a syntax error (not a valid JavaScript)
