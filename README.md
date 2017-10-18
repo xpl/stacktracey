@@ -7,10 +7,12 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 ## Why
 
 - [x] Simple
+- [x] Works in Node and browsers
 - [x] Allows hiding library calls / ad-hoc exclusion (via `// @hide` marker)
 - [x] Provides source text for call locations
 - [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
 - [x] Full sourcemap support
+- [x] Extracts useful information from `SyntaxError` instances
 - [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
       <img width="898" alt="screen shot 2017-09-27 at 16 53 46" src="https://user-images.githubusercontent.com/1707/30917345-79899004-a3a4-11e7-8d48-e217e2d5e2cd.png">
 
@@ -65,10 +67,11 @@ stack[0]               // top
     line:         <line number>,             // starts from 1
     column:       <column number>,           // starts from 1
 
-    index:          /* true if occured in HTML file at index page   */,
-    native:         /* true if occured in native browser code       */,
-    thirdParty:     /* true if occured in library code              */,
-    hide:           /* true if marked as hidden by "// @hide" tag   */
+    index:          /* true if occured in HTML file at index page    */,
+    native:         /* true if occured in native browser code        */,
+    thirdParty:     /* true if occured in library code               */,
+    hide:           /* true if marked as hidden by "// @hide" tag    */,
+    syntaxError:    /* true if generated from a SyntaxError instance */
 }
 ```
 

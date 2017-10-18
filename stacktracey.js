@@ -14,7 +14,10 @@ const O            = Object,
 class StackTracey extends Array {
 
     constructor (input, offset) {
-
+        
+        const originalInput          = input
+            , isParseableSyntaxError = input && (input instanceof SyntaxError && !isBrowser)
+        
         super ()
 
     /*  Fixes for Safari    */
@@ -26,24 +29,43 @@ class StackTracey extends Array {
 
         if (!input) {
              input = new Error ()
-             offset = (offset === undefined) ? 1 : offset }
+             offset = (offset === undefined) ? 1 : offset
+        }
 
     /*  new StackTracey (Error)      */
 
         if (input instanceof Error) {
-            input = input[StackTracey.stack] || input.stack || '' }
+            input = input[StackTracey.stack] || input.stack || ''
+        }
 
     /*  new StackTracey (string)     */
 
         if (typeof input === 'string') {
-            input = StackTracey.rawParse (input).slice (offset).map (StackTracey.extractEntryMetadata) }
+            input = StackTracey.rawParse (input).slice (offset).map (StackTracey.extractEntryMetadata)
+        }
 
     /*  new StackTracey (array)      */
 
         if (Array.isArray (input)) {
 
+            if (isParseableSyntaxError) {
+                
+                const rawLines = module.require ('util').inspect (originalInput).split ('\n')
+                    , fileLine = rawLines[0].match (/^([^:]+):(.+)/)
+
+                input.unshift ({
+                    file: fileLine && fileLine[1],
+                    line: fileLine && fileLine[2],
+                    column: rawLines[2].indexOf ('^'),
+                    sourceLine: rawLines[1],
+                    callee: '(syntax error)',
+                    syntaxError: true
+                })
+            }
+
             this.length = input.length
-            input.forEach ((x, i) => this[i] = x) }
+            input.forEach ((x, i) => this[i] = x)
+        }
     }
 
     static extractEntryMetadata (e) {

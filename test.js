@@ -178,6 +178,15 @@ describe ('StackTracey', () => {
         StackTracey.shortenPath   ('node_modules/jquery/dist/jquery.js')
                     .should.equal ('jquery/dist/jquery.js')
     })
+
+    it ('recognizes SyntaxErrors', () => {
+
+        try { require ('./test_files/syntax_error.js') }
+        catch (e) {
+            new StackTracey (e)[0].syntaxError.should.equal (true)
+            new StackTracey (e).clean.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
+        }
+    })
 })
 
 
