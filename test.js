@@ -20,7 +20,7 @@ describe ('impl/partition', () => {
 
 describe ('StackTracey', () => {
 
-    const StackTracey = require ('./stacktracey')
+    const StackTracey = require ('./stacktracey'); StackTracey.resetCache ()
 
     const shouldBeVisibleInStackTrace = () => new StackTracey () // @hide
 
@@ -195,6 +195,28 @@ describe ('StackTracey', () => {
             }
         })
     }
+
+    it ('implements StackTracey.isThirdParty', () => {
+
+        StackTracey.isThirdParty.include (path => path === 'test.js')
+
+        new StackTracey ()[0].thirdParty.should.equal (true)
+
+        StackTracey.isThirdParty.except (path => path === 'test.js')
+        
+        new StackTracey ()[0].thirdParty.should.equal (false)
+    })
+
+    it ('.withSource', () => {
+
+        const line = new StackTracey ().withSource (0).sourceLine.trim ()
+        line.should.equal ('const line = new StackTracey ().withSource (0).sourceLine.trim ()')
+    })
+
+    it ('.at', () => {
+        
+        new StackTracey ().at (0).file.should.equal ('/Users/mac/stacktracey/test.js')
+    })
 })
 
 

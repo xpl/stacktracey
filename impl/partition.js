@@ -7,7 +7,7 @@ module.exports = (arr_, pred) => {
     
     let span = { label: undefined,
                  items: [arr.first] }
-
+                 
     arr.forEach (x => {
 
         const label = pred (x)
@@ -17,9 +17,6 @@ module.exports = (arr_, pred) => {
 
         else {
             span.items.push (x) } })
-
-    if (span.length)
-        spans.push (span)
 
     return spans
 }
