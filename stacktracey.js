@@ -72,14 +72,14 @@ class StackTracey extends Array {
 
     static extractEntryMetadata (e) {
         
-        const fileRelative = StackTracey.relativePath (e.file)
+        const fileRelative = StackTracey.relativePath (e.file || '')
 
         return O.assign (e, {
 
-            calleeShort:  e.calleeShort || lastOf (e.callee.split ('.')),
+            calleeShort:  e.calleeShort || lastOf ((e.callee || '').split ('.')),
             fileRelative: fileRelative,
             fileShort:    StackTracey.shortenPath (fileRelative),
-            fileName:     lastOf (e.file.split ('/')),
+            fileName:     lastOf ((e.file || '').split ('/')),
             thirdParty:   StackTracey.isThirdParty (fileRelative) && !e.index
         })
     }
@@ -141,10 +141,10 @@ class StackTracey extends Array {
     static withSource (loc) {
 
         if (loc.sourceFile || (loc.file && loc.file.indexOf ('<') >= 0)) { // skip things like <anonymous> and stuff that was already fetched
-            return loc }
-
-        else {
-            let resolved = getSource (loc.file).resolve (loc)
+            return loc
+            
+        } else {
+            let resolved = getSource (loc.file || '').resolve (loc)
 
             if (resolved.sourceFile) {
                 resolved.file = resolved.sourceFile.path
@@ -255,7 +255,7 @@ class StackTracey extends Array {
 /*  A private field that an Error instance can expose
     ------------------------------------------------------------------------ */
 
-StackTracey.stack = (typeof Symbol !== 'undefined') ? Symbol.for ('StackTracey') : '__StackTracey'
+StackTracey.stack = /* istanbul ignore next */ (typeof Symbol !== 'undefined') ? Symbol.for ('StackTracey') : '__StackTracey'
 
 /*  ------------------------------------------------------------------------ */
 

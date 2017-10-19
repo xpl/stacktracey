@@ -138,6 +138,11 @@ describe ('StackTracey', () => {
         const pretty = new StackTracey ().clean.pretty
 
         pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:138    const pretty = new StackTracey ().clean.pretty')
+
+        ;(new StackTracey ([
+            { },
+            { }
+        ]).clean.pretty).should.equal ('at <anonymous> → <anonymous>')
     })
 
     it ('exposes Array methods', () => {
