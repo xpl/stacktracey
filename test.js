@@ -142,7 +142,7 @@ describe ('StackTracey', () => {
         ;(new StackTracey ([
             { },
             { }
-        ]).clean.pretty).should.equal ('at <anonymous> → <anonymous>')
+        ]).clean.pretty).trim ().should.equal ('at <anonymous> → <anonymous>')
     })
 
     it ('exposes Array methods', () => {
