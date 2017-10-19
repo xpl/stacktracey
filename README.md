@@ -139,16 +139,16 @@ const prettyPrintedString = new StackTracey (error).pretty
 It produces a nice compact table layout (thanks to [`as-table`](https://github.com/xpl/as-table)), supplied with source lines (if available):
 
 ```
-at shouldBeVisibleInStackTrace     test.js:25                              const shouldBeVisibleInStackTrace = () => new StackTracey ()
-at it                              test.js:100                             const stack = shouldBeVisibleInStackTrace ()                
-at callFn                          node_modules/mocha/lib/runnable.js:326  var result = fn.call(ctx);                                  
-at run                             node_modules/mocha/lib/runnable.js:319  callFn(this.fn);                                            
-at runTest                         node_modules/mocha/lib/runner.js:422    test.run(fn);                                               
-at                                 node_modules/mocha/lib/runner.js:528    self.runTest(function(err) {                                
-at next                            node_modules/mocha/lib/runner.js:342    return fn();                                                
-at                                 node_modules/mocha/lib/runner.js:352    next(suites.pop());                                         
-at next                            node_modules/mocha/lib/runner.js:284    return fn();                                                
-at <anonymous>                     node_modules/mocha/lib/runner.js:320    next(0);                  
+at shouldBeVisibleInStackTrace     test.js:25                 const shouldBeVisibleInStackTrace = () => new StackTracey ()
+at it                              test.js:100                const stack = shouldBeVisibleInStackTrace ()                
+at callFn                          mocha/lib/runnable.js:326  var result = fn.call(ctx);                                  
+at run                             mocha/lib/runnable.js:319  callFn(this.fn);                                            
+at runTest                         mocha/lib/runner.js:422    test.run(fn);                                               
+at                                 mocha/lib/runner.js:528    self.runTest(function(err) {                                
+at next                            mocha/lib/runner.js:342    return fn();                                                
+at                                 mocha/lib/runner.js:352    next(suites.pop());                                         
+at next                            mocha/lib/runner.js:284    return fn();                                                
+at <anonymous>                     mocha/lib/runner.js:320    next(0);                  
 ```
 
 You can even replace the default NodeJS exception printer with this! This is how you can do it:
