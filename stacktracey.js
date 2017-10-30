@@ -207,7 +207,7 @@ class StackTracey extends Array {
                             e => [
                                 ('at ' + trimEnd (e.calleeShort, 30)),
                                 trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', 40),
-                                trimStart (((e.sourceLine || '').trim () || ''), 80)
+                                trimEnd (((e.sourceLine || '').trim () || ''), 80)
                             ]))
     }
 
