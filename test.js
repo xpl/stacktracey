@@ -63,7 +63,7 @@ describe ('StackTracey', () => {
         StackTracey.locationsEqual (cleanStack[0], stack[0]).should.equal (true)  // should not clean top element
         StackTracey.locationsEqual (cleanStack[1], stack[1]).should.equal (false) // should clean second element (due to // @hide)
     })
-
+        
     it ('allows creation from array + groups duplicate lines', () => {
 
         const stack = new StackTracey ([
@@ -145,6 +145,15 @@ describe ('StackTracey', () => {
         ]).clean.pretty).trim ().should.equal ('at <anonymous> → <anonymous>')
     })
 
+    it ('trims too long columns in the pretty printed output', () => {
+
+        const stack = new StackTracey ([
+            { file: 'dasdasdasdadadadasdasdasdadasdassdasdaddadasdas.js',  line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
+        ])
+
+        stack.pretty.split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …adasdasdasdadasdassdasdaddadasdas.js:11  ')
+    })
+    
     it ('exposes Array methods', () => {
 
         const stack = new StackTracey ([

@@ -200,10 +200,15 @@ class StackTracey extends Array {
 
     get pretty () {
 
+        const trimEnd   = (s, n) => (s.length > n) ? (s.slice (0, n-1) + '…') : s        
+        const trimStart = (s, n) => (s.length > n) ? ('…' + s.slice (-(n-1))) : s
+
         return asTable (this.withSources.map (
-                            e => [  ('at ' + e.calleeShort.slice (0, 30)),
-                                    (e.fileShort && (e.fileShort + ':' + e.line)) || '',
-                                    ((e.sourceLine || '').trim () || '').slice (0, 80)      ]))
+                            e => [
+                                ('at ' + trimEnd (e.calleeShort, 30)),
+                                trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', 40),
+                                trimStart (((e.sourceLine || '').trim () || ''), 80)
+                            ]))
     }
 
     static resetCache () {
