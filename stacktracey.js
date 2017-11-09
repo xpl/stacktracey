@@ -8,7 +8,7 @@ const O            = Object,
       getSource    = require ('get-source'),
       partition    = require ('./impl/partition'),
       asTable      = require ('as-table'),
-      process_cwd  = process.cwd ()
+      pathRoot     = isBrowser ? window.location.href : (process.cwd () + '/')
 
 /*  ------------------------------------------------------------------------ */
 
@@ -91,7 +91,7 @@ class StackTracey extends Array {
     }
 
     static relativePath (fullPath) {
-        return fullPath.replace (isBrowser ? window.location.href : (process_cwd + '/'), '')
+        return fullPath.replace (pathRoot, '')
                        .replace (/^.*\:\/\/?\/?/, '')
     }
 
