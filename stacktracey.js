@@ -8,7 +8,8 @@ const O            = Object,
       getSource    = require ('get-source'),
       partition    = require ('./impl/partition'),
       asTable      = require ('as-table'),
-      pathRoot     = isBrowser ? window.location.href : (process.cwd () + '/')
+      nixSlashes   = x => x.replace (/\\/g, '/'),
+      pathRoot     = isBrowser ? window.location.href : (nixSlashes (process.cwd ()) + '/')
 
 /*  ------------------------------------------------------------------------ */
 
@@ -56,7 +57,7 @@ class StackTracey extends Array {
 
                 if (fileLine) {
                     input.unshift ({
-                        file: fileLine[1],
+                        file: nixSlashes (fileLine[1]),
                         line: fileLine[2],
                         column: (rawLines[2] || '').indexOf ('^') + 1,
                         sourceLine: rawLines[1],
@@ -138,7 +139,7 @@ class StackTracey extends Array {
                 callee:      callee || '',
                 index:       isBrowser && (fileLineColumn[0] === window.location.href),
                 native:      native || false,
-                file:        fileLineColumn[0] || '',
+                file:        nixSlashes (fileLineColumn[0] || ''),
                 line:        parseInt (fileLineColumn[1] || '', 10) || undefined,
                 column:      parseInt (fileLineColumn[2] || '', 10) || undefined } })
 
@@ -225,10 +226,6 @@ class StackTracey extends Array {
     static resetCache () {
 
         getSource.resetCache ()
-    }
-
-    get asArray () {
-
     }
 }
 
