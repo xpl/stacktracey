@@ -150,7 +150,7 @@ describe ('StackTracey', () => {
         const stack = new StackTracey ([
             { fileShort: 'dasdasdasdadadadasdasdasdadasdassdasdaddadasdas.js', line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
         ])
-        
+
         stack.pretty.split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …adasdasdasdadasdassdasdaddadasdas.js:11  ')
     })
     
@@ -203,8 +203,12 @@ describe ('StackTracey', () => {
 
                 const stack = new StackTracey (e).clean
 
+                console.log ('')
+                console.log (stack.pretty, '\n')
+
                 stack[0].syntaxError.should.equal (true)
                 stack[0].column.should.equal (5)
+                
                 stack.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
             }
         })
