@@ -20,7 +20,10 @@ describe ('impl/partition', () => {
 
 describe ('StackTracey', () => {
 
-    const StackTracey = require ('./stacktracey'); StackTracey.resetCache ()
+    const path = require ('path')
+    const StackTracey = require ('./stacktracey')
+    
+    StackTracey.resetCache ()
 
     const shouldBeVisibleInStackTrace = () => new StackTracey () // @hide
 
@@ -31,12 +34,12 @@ describe ('StackTracey', () => {
         stack.should.be.an.instanceof (Array)
 
         stack[0].should.deep.equal ({
-            beforeParse: 'at shouldBeVisibleInStackTrace (' + process.cwd () + '/test.js:25:47)',
+            beforeParse: 'at shouldBeVisibleInStackTrace (' + path.join (process.cwd (), 'test.js') + ':28:47)',
             callee: 'shouldBeVisibleInStackTrace',
             index: false,
             native: false,
-            file: process.cwd () + '/test.js',
-            line: 25,
+            file: path.join (process.cwd (), 'test.js'),
+            line: 28,
             column: 47,
             calleeShort: 'shouldBeVisibleInStackTrace',
             fileName: 'test.js',
@@ -111,8 +114,7 @@ describe ('StackTracey', () => {
 
     it ('works with sourcemaps', () => {
 
-        const path = require ('path'),
-              mkay = require ('./test_files/mkay.uglified')
+        const mkay = require ('./test_files/mkay.uglified')
 
         try {
             mkay ()
@@ -127,7 +129,7 @@ describe ('StackTracey', () => {
             top.column      .should.equal (22)
             top.sourceLine  .should.equal ('\t\t\t\t\tthrow new Error (\'mkay\') }')
 
-            top.file        .should.equal (path.resolve ('./test_files/mkay.js'))
+            top.file        .should.equal (path.resolve ('./test_files/mkay.js').replace (/\\/g, '/'))
             top.fileShort   .should.equal ('test_files/mkay.js')
             top.fileName    .should.equal ('mkay.js')
         }
@@ -137,7 +139,7 @@ describe ('StackTracey', () => {
 
         const pretty = new StackTracey ().clean.pretty
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:138    const pretty = new StackTracey ().clean.pretty')
+        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:140    const pretty = new StackTracey ().clean.pretty')
 
         ;(new StackTracey ([
             { },
@@ -247,15 +249,19 @@ describe ('StackTracey', () => {
         const windowsStack =
                 [
                 'Error',
-                '    at Context.it (' + dir + '\\test.js:31:22)',
+                '    at Context.it (' + dir + '\\test.js:34:22)',
                 '    at callFn (' + dir + '\\node_modules\\mocha\\lib\\runnable.js:354:21)',
                 '    at runCallback (timers.js:800:20)'
                 ].join ('\n')
 
         const stack = new StackTracey (windowsStack)
-        const lines = stack.pretty.split ('\n')
+        const pretty = stack.pretty
+        const lines = pretty.split ('\n')
 
-        lines[0].should.equal ('at it           test.js:31                 stack.should.be.an.instanceof (Array)')
+        console.log ('')
+        console.log (pretty, '\n')
+
+        lines[0].should.equal ('at it           test.js:34                 stack.should.be.an.instanceof (Array)')
         lines[1].indexOf      ('at callFn       mocha/lib/runnable.js:354').should.equal (0)
     })
 
