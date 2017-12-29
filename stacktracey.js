@@ -156,16 +156,17 @@ class StackTracey extends Array {
             return loc
             
         } else {
-            let resolved = getSource (loc.file || '').resolve (loc)
 
-            if (resolved.sourceFile) {
-                resolved.file = resolved.sourceFile.path
+            let resolved = getSource (loc.file || '').resolve (loc)
+            
+            if (!resolved.sourceFile.error) {
+                resolved.file = nixSlashes (resolved.sourceFile.path)
                 resolved = StackTracey.extractEntryMetadata (resolved)
             }
 
-            if (resolved.sourceLine && resolved.sourceLine.includes ('// @hide')) {
-                resolved.sourceLine  = resolved.sourceLine.replace  ('// @hide', '')
-                resolved.hide = true
+            if (!resolved.sourceLine.error && resolved.sourceLine.includes ('// @hide')) {
+                resolved.sourceLine         = resolved.sourceLine.replace  ('// @hide', '')
+                resolved.hide               = true
             }
 
             return O.assign ({ sourceLine: '' }, loc, resolved)

@@ -38,7 +38,7 @@ describe ('StackTracey', () => {
             callee: 'shouldBeVisibleInStackTrace',
             index: false,
             native: false,
-            file: path.join (process.cwd (), 'test.js'),
+            file: path.join (process.cwd (), 'test.js').replace (/\\/g, '/'),
             line: 28,
             column: 47,
             calleeShort: 'shouldBeVisibleInStackTrace',
@@ -86,9 +86,9 @@ describe ('StackTracey', () => {
 
         Array.from (clean).should.deep.equal ([ // .should does not recognize StackTracey as normal array...
 
-            { file: process.cwd () + '/yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
-            { file: process.cwd () + '/yo.js',  line: 10, callee: 'foobar.boobar → foobar.boobar', calleeShort: 'foobar → foobar' },
-            { file: process.cwd () + '/lol.js', line: 10, callee: '',              calleeShort: '' },
+            { file: 'yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
+            { file: 'yo.js',  line: 10, callee: 'foobar.boobar → foobar.boobar', calleeShort: 'foobar → foobar' },
+            { file: 'lol.js', line: 10, callee: '',              calleeShort: '' },
         ])
     })
 
@@ -139,20 +139,18 @@ describe ('StackTracey', () => {
 
         const pretty = new StackTracey ().clean.pretty
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:140    const pretty = new StackTracey ().clean.pretty')
+        console.log ('')
+        console.log (pretty, '\n')
 
-        ;(new StackTracey ([
-            { },
-            { }
-        ]).clean.pretty).trim ().should.equal ('at <anonymous> → <anonymous>')
+        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:140    const pretty = new StackTracey ().clean.pretty')
     })
 
     it ('trims too long columns in the pretty printed output', () => {
 
         const stack = new StackTracey ([
-            { file: 'dasdasdasdadadadasdasdasdadasdassdasdaddadasdas.js',  line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
+            { fileShort: 'dasdasdasdadadadasdasdasdadasdassdasdaddadasdas.js', line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
         ])
-
+        
         stack.pretty.split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …adasdasdasdadasdassdasdaddadasdas.js:11  ')
     })
     
