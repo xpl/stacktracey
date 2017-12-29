@@ -213,8 +213,8 @@ class StackTracey extends Array {
 
     get pretty () {
 
-        const trimEnd   = (s, n) => (s.length > n) ? (s.slice (0, n-1) + '…') : s        
-        const trimStart = (s, n) => (s.length > n) ? ('…' + s.slice (-(n-1))) : s
+        const trimEnd   = (s, n) => s && ((s.length > n) ? (s.slice (0, n-1) + '…') : s)   
+        const trimStart = (s, n) => s && ((s.length > n) ? ('…' + s.slice (-(n-1))) : s)
 
         return asTable (this.withSources.map (
                             e => [
