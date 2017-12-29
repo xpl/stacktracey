@@ -196,10 +196,12 @@ describe ('StackTracey', () => {
     const nodeVersion = Number (process.version.match(/^v(\d+\.\d+)/)[1])
     if (nodeVersion >= 5) {
 
-        it ('recognizes SyntaxErrors', () => {
+        it.only ('recognizes SyntaxErrors', () => {
 
             try { require ('./test_files/syntax_error.js') }
             catch (e) {
+
+                console.log (require ('util').inspect (e), '\n')
 
                 const stack = new StackTracey (e).clean
 
