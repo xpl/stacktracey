@@ -123,6 +123,16 @@ class StackTracey extends Array {
             else {
                 return undefined }
 
+        /*  Detect things like Array.reduce
+            TODO: detect more built-in types            */
+            
+            if (callee && !fileLineColumn[0]) {
+                const type = callee.split ('.')[0]
+                if (type === 'Array') {
+                    native = true
+                }
+            }
+
             return {
                 beforeParse: line,
                 callee:      callee || '',

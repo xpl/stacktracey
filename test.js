@@ -231,6 +231,14 @@ describe ('StackTracey', () => {
         
         new StackTracey ().at (0).file.includes ('stacktracey/test.js').should.equal (true)
     })
+
+    it ('detects Array methods as native', () => {
+
+        const arr = [1,2,3]
+        const stack = arr.reduce (() => new StackTracey ())
+
+        stack[1].native.should.equal (true)
+    })
 })
 
 
