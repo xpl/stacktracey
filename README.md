@@ -7,7 +7,7 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 ## Why
 
 - [x] Simple
-- [x] Works in Node and browsers
+- [x] Works in Node and browsers, \*nix and Windows
 - [x] Allows hiding library calls / ad-hoc exclusion (via `// @hide` marker)
 - [x] Provides source text for call locations
 - [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
