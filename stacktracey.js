@@ -52,13 +52,15 @@ class StackTracey extends Array {
 
             if (isParseableSyntaxError) {
                 
-                const rawLines = module.require ('util').inspect (originalInput).split ('\n')
-                    , fileLine = rawLines[0].match (/^([^:]+):(.+)/)
+                const rawLines   = module.require ('util').inspect (originalInput).split ('\n')
+                    , fileLine = rawLines[0].split (':')
+                    , line = fileLine.pop ()
+                    , file = fileLine.join (':')
 
-                if (fileLine) {
+                if (file) {
                     input.unshift ({
-                        file: nixSlashes (fileLine[1]),
-                        line: fileLine[2],
+                        file: nixSlashes (file),
+                        line: line,
                         column: (rawLines[2] || '').indexOf ('^') + 1,
                         sourceLine: rawLines[1],
                         callee: '(syntax error)',
