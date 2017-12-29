@@ -186,7 +186,7 @@ class StackTracey extends Array {
     }
 
     get clean () {
-        return this.withSources.mergeRepeatedLines.filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide))
+        return this.withSources.mergeRepeatedLines.filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide || e.native))
     }
 
     at (i) {
