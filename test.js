@@ -239,6 +239,26 @@ describe ('StackTracey', () => {
 
         stack[1].native.should.equal (true)
     })
+
+    it ('works on Windows', () => {
+
+        const dir = process.cwd ()
+
+        const windowsStack =
+                [
+                'Error',
+                '    at Context.it (' + dir + '\\test.js:31:22)',
+                '    at callFn (' + dir + '\\node_modules\\mocha\\lib\\runnable.js:354:21)',
+                '    at runCallback (timers.js:800:20)'
+                ].join ('\n')
+
+        const stack = new StackTracey (windowsStack)
+        const lines = stack.pretty.split ('\n')
+
+        lines[0].should.equal ('at it           test.js:31                 stack.should.be.an.instanceof (Array)')
+        lines[1].indexOf      ('at callFn       mocha/lib/runnable.js:354').should.equal (0)
+    })
+
 })
 
 
