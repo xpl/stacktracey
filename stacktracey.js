@@ -160,7 +160,11 @@ class StackTracey extends Array {
         } else {
 
             let resolved = getSource (loc.file || '').resolve (loc)
-            
+
+            if (!resolved.sourceFile) {
+                return loc
+            }
+
             if (!resolved.sourceFile.error) {
                 resolved.file = nixSlashes (resolved.sourceFile.path)
                 resolved = StackTracey.extractEntryMetadata (resolved)
