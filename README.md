@@ -158,6 +158,17 @@ process.on ('uncaughtException',  e => { /* print the stack here */ })
 process.on ('unhandledRejection', e => { /* print the stack here */ })
 ```
 
+But the most simple way to achieve that is to use the [`ololog`](https://github.com/xpl/ololog/blob/master/README.md) library (that is built upon StackTracey and several other handy libraries coded by me). Check it out, [it's pretty awesome and will blow your brains out](https://github.com/xpl/ololog/blob/master/README.md) :)
+
+```javascript
+const log = require ('ololog').handleNodeErrors ()
+
+// you can also print Errors by simply passing them to the log() function
+```
+
+<img width="1066" alt="screen shot 2018-05-11 at 19 51 03" src="https://user-images.githubusercontent.com/1707/39936393-ffd529c2-5554-11e8-80f8-eff1229017c4.png">
+
+ 
 ## Parsing `SyntaxError` instances
 
 For example, when trying to `require` a file named `test_files/syntax_error.js`:
