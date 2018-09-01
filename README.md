@@ -168,6 +168,18 @@ const log = require ('ololog').handleNodeErrors ()
 
 <img width="1066" alt="screen shot 2018-05-11 at 19 51 03" src="https://user-images.githubusercontent.com/1707/39936393-ffd529c2-5554-11e8-80f8-eff1229017c4.png">
 
+### Overriding Max Column Widths in Pretty Printed Tables
+
+If you get your pretty printed tables undesirably trimmed, you can try changing these numbers:
+
+```javascript
+StackTracey.maxColumnWidths = {
+
+    callee:     30,
+    file:       40,
+    sourceLine: 80
+}
+```
  
 ## Parsing `SyntaxError` instances
 

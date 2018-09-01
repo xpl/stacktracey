@@ -224,9 +224,9 @@ class StackTracey extends Array {
 
         return asTable (this.withSources.map (
                             e => [
-                                ('at ' + trimEnd (e.calleeShort, 30)),
-                                trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', 40),
-                                trimEnd (((e.sourceLine || '').trim () || ''), 80)
+                                ('at ' + trimEnd (e.calleeShort,                                StackTracey.maxColumnWidths.callee)),
+                                trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', StackTracey.maxColumnWidths.file),
+                                trimEnd (((e.sourceLine || '').trim () || ''),                  StackTracey.maxColumnWidths.sourceLine)
                             ]))
     }
 
@@ -236,10 +236,20 @@ class StackTracey extends Array {
     }
 }
 
+/*  Some default configuration options
+    ------------------------------------------------------------------------ */
+
+StackTracey.maxColumnWidths = {
+
+    callee:     30,
+    file:       40,
+    sourceLine: 80
+}
+
 /*  Chaining helper for .isThirdParty
     ------------------------------------------------------------------------ */
 
-(() => {
+;(() => {
 
     const methods = {
 
