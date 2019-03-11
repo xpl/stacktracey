@@ -74,15 +74,15 @@
   "homepage": "https://xpl.github.io/stacktracey",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "chai": "^4.1.2",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.14.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.3",
+    "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
     "mocha": "^4.1.0",
-    "nyc": "^11.4.1"
+    "nyc": "^13.3.0"
   },
   "dependencies": {
-    "as-table": "^1.0.31",
-    "get-source": "^1.0.24"
+    "as-table": "^1.0.36",
+    "get-source": "^1.0.30"
   }
 }
