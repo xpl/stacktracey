@@ -126,7 +126,7 @@ describe ('StackTracey', () => {
             const top = new StackTracey (e).withSources[0]
 
             top.line        .should.equal (4)
-            top.column      .should.equal (22)
+            top.column      .should.equal (23)
             top.sourceLine  .should.equal ('\t\t\t\t\tthrow new Error (\'mkay\') }')
 
             top.file        .should.equal (path.resolve ('./test_files/mkay.js').replace (/\\/g, '/'))
