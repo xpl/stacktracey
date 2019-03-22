@@ -18,7 +18,7 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 
 ## What For
 
-- [Error overlay UIs](https://github.com/xpl/panic-overlay/) for easier front-end development
+- [Error overlay UIs](https://github.com/xpl/panic-overlay/#how-it-looks) for easier front-end development
 - [Better error reporting](https://github.com/xpl/ololog#pretty-printing-error-instances) for Node projects
 - [Advanced logging](https://github.com/xpl/ololog#displaying-call-location) (displaying call locations)
 - Assertion printing
