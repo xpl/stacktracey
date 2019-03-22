@@ -18,7 +18,8 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 
 ## What For
 
-- [Better exception reporting](https://github.com/xpl/ololog#pretty-printing-error-instances) for Node and browsers
+- [Error overlay UIs](https://github.com/xpl/panic-overlay/) for easier front-end development
+- [Better error reporting](https://github.com/xpl/ololog#pretty-printing-error-instances) for Node projects
 - [Advanced logging](https://github.com/xpl/ololog#displaying-call-location) (displaying call locations)
 - Assertion printing
 
@@ -242,6 +243,7 @@ StackTracey.resetCache ()
 ## Projects That Use StackTracey
 
 - [Ololog](https://github.com/xpl/ololog) — a better `console.log` for the log-driven debugging junkies!
-- [CCXT](https://github.com/ccxt-dev/ccxt) — a cryptocurrency trading library that supports 85+ exchanges
+- [CCXT](https://github.com/ccxt-dev/ccxt) — a cryptocurrency trading library that supports 130+ exchanges
 - [pnpm](https://github.com/pnpm/pnpm) — a fast, disk space efficient package manager (faster than npm and Yarn!)
+- [panic-overlay](https://github.com/xpl/panic-overlay/) — a lightweight standalone alternative to `react-error-overlay`
 
