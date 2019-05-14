@@ -79,10 +79,10 @@
     "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
     "mocha": "^4.1.0",
-    "nyc": "^13.3.0"
+    "nyc": "^14.1.1"
   },
   "dependencies": {
     "as-table": "^1.0.36",
-    "get-source": "^1.0.32"
+    "get-source": "^1.0.34"
   }
 }
