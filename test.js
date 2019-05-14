@@ -1,6 +1,10 @@
 "use strict";
 
 /*  ------------------------------------------------------------------------ */
+
+const nodeVersion = Math.floor (Number (process.version.match (/^v(\d+\.\d+)/)[1]))
+
+/*  ------------------------------------------------------------------------ */
                     
 require ('chai').should ()
 
@@ -34,12 +38,12 @@ describe ('StackTracey', () => {
         stack.should.be.an.instanceof (Array)
 
         stack[0].should.deep.equal ({
-            beforeParse: 'at shouldBeVisibleInStackTrace (' + path.join (process.cwd (), 'test.js') + ':28:47)',
+            beforeParse: 'at shouldBeVisibleInStackTrace (' + path.join (process.cwd (), 'test.js') + ':32:47)',
             callee: 'shouldBeVisibleInStackTrace',
             index: false,
             native: false,
             file: path.join (process.cwd (), 'test.js').replace (/\\/g, '/'),
-            line: 28,
+            line: 32,
             column: 47,
             calleeShort: 'shouldBeVisibleInStackTrace',
             fileName: 'test.js',
@@ -142,7 +146,9 @@ describe ('StackTracey', () => {
         console.log ('')
         console.log (pretty, '\n')
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest                      test.js:140    const pretty = new StackTracey ().clean.pretty')
+        const spaces = nodeVersion > 8 ? '        ' : '                      ';
+
+        pretty.split ('\n')[0].should.equal ('at prettyTest' + spaces + 'test.js:144    const pretty = new StackTracey ().clean.pretty')
     })
 
     it ('trims too long columns in the pretty printed output', () => {
@@ -193,7 +199,6 @@ describe ('StackTracey', () => {
                     .should.equal ('jquery/dist/jquery.js')
     })
 
-    const nodeVersion = Number (process.version.match(/^v(\d+\.\d+)/)[1])
     if (nodeVersion >= 5) {
 
         it ('recognizes SyntaxErrors', () => {
@@ -209,7 +214,10 @@ describe ('StackTracey', () => {
                 stack[0].syntaxError.should.equal (true)
                 stack[0].column.should.equal (5)
                 
-                stack.pretty.split ('\n')[0].should.equal ('at (syntax error)                  test_files/syntax_error.js:2  foo->bar ()                                     ')
+                const spaces  = nodeVersion > 8 ? '    ' : '                  '
+                const spaces2 = nodeVersion > 8 ? '        ' : '  '
+
+                stack.pretty.split ('\n')[0].should.equal ('at (syntax error)' + spaces + 'test_files/syntax_error.js:2' + spaces2 + 'foo->bar ()                                     ')
             }
         })
     }
@@ -251,7 +259,7 @@ describe ('StackTracey', () => {
         const windowsStack =
                 [
                 'Error',
-                '    at Context.it (' + dir + '\\test.js:34:22)',
+                '    at Context.it (' + dir + '\\test.js:38:22)',
                 '    at callFn (' + dir + '\\node_modules\\mocha\\lib\\runnable.js:354:21)',
                 '    at runCallback (timers.js:800:20)'
                 ].join ('\n')
@@ -263,7 +271,7 @@ describe ('StackTracey', () => {
         console.log ('')
         console.log (pretty, '\n')
 
-        lines[0].should.equal ('at it           test.js:34                 stack.should.be.an.instanceof (Array)')
+        lines[0].should.equal ('at it           test.js:38                 stack.should.be.an.instanceof (Array)')
         lines[1].indexOf      ('at callFn       mocha/lib/runnable.js:354').should.equal (0)
     })
 
