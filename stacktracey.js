@@ -118,13 +118,14 @@ class StackTracey extends Array {
 
                 callee         =  planA[1]
                 native         = (planA[2] === 'native')
-                fileLineColumn = (planA[2].match (/(.*):(.+):(.+)/) || []).slice (1) }
+                fileLineColumn = (planA[2].match (/(.*):(.+):(.+)/) || []).slice (1)
 
-            else if ((planB = line.match (/^(at\s+)*(.+):([0-9]+):([0-9]+)/) )) {
-                fileLineColumn = (planB).slice (2) }
+            } else if ((planB = line.match (/^(at\s+)*(.+):([0-9]+):([0-9]+)/) )) {
+                fileLineColumn = (planB).slice (2)
 
-            else {
-                return undefined }
+            } else {
+                return undefined
+            }
 
         /*  Detect things like Array.reduce
             TODO: detect more built-in types            */
@@ -143,7 +144,9 @@ class StackTracey extends Array {
                 native:      native || false,
                 file:        nixSlashes (fileLineColumn[0] || ''),
                 line:        parseInt (fileLineColumn[1] || '', 10) || undefined,
-                column:      parseInt (fileLineColumn[2] || '', 10) || undefined } })
+                column:      parseInt (fileLineColumn[2] || '', 10) || undefined
+            }
+        })
 
         return entries.filter (x => (x !== undefined))
     }
@@ -170,9 +173,15 @@ class StackTracey extends Array {
                 resolved = StackTracey.extractEntryMetadata (resolved)
             }
 
-            if (!resolved.sourceLine.error && resolved.sourceLine.includes ('// @hide')) {
-                resolved.sourceLine         = resolved.sourceLine.replace  ('// @hide', '')
-                resolved.hide               = true
+            if (!resolved.sourceLine.error) {
+                if (resolved.sourceLine.includes ('// @hide')) {
+                    resolved.sourceLine = resolved.sourceLine.replace  ('// @hide', '')
+                    resolved.hide       = true
+                }
+                if (resolved.sourceLine.includes ('__webpack_require__') || // webpack-specific heuristics
+                    resolved.sourceLine.includes ('/******/ ({')) {
+                    resolved.thirdParty = true
+                }
             }
 
             return O.assign ({ sourceLine: '' }, loc, resolved)
@@ -190,7 +199,10 @@ class StackTracey extends Array {
                     return group.items.slice (1).reduce ((memo, entry) => {
                         memo.callee      = (memo.callee      || '<anonymous>') + ' → ' + (entry.callee      || '<anonymous>')
                         memo.calleeShort = (memo.calleeShort || '<anonymous>') + ' → ' + (entry.calleeShort || '<anonymous>')
-                        return memo }, O.assign ({}, group.items[0])) }))
+                        return memo }, O.assign ({}, group.items[0]))
+                }
+            )
+        )
     }
 
     get clean () {
