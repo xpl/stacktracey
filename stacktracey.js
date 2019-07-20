@@ -95,7 +95,7 @@ class StackTracey extends Array {
     }
 
     static relativePath (fullPath) {
-        return pathToRelative (pathRoot, fullPath).replace (/^.*\:\/\/?\/?/, '')
+        return nixSlashes (pathToRelative (pathRoot, fullPath)).replace (/^.*\:\/\/?\/?/, '')
     }
 
     static isThirdParty (relativePath) {
