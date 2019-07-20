@@ -2,14 +2,15 @@
 
 /*  ------------------------------------------------------------------------ */
 
-const O            = Object,
-      isBrowser    = (typeof window !== 'undefined') && (window.window === window) && window.navigator,
-      lastOf       = x => x[x.length - 1],
-      getSource    = require ('get-source'),
-      partition    = require ('./impl/partition'),
-      asTable      = require ('as-table'),
-      nixSlashes   = x => x.replace (/\\/g, '/'),
-      pathRoot     = isBrowser ? window.location.href : (nixSlashes (process.cwd ()) + '/')
+const O              = Object,
+      isBrowser      = (typeof window !== 'undefined') && (window.window === window) && window.navigator,
+      lastOf         = x => x[x.length - 1],
+      getSource      = require ('get-source'),
+      partition      = require ('./impl/partition'),
+      asTable        = require ('as-table'),
+      nixSlashes     = x => x.replace (/\\/g, '/'),
+      pathRoot       = isBrowser ? window.location.href : (nixSlashes (process.cwd ()) + '/'),
+      pathToRelative = isBrowser ? ((root, full) => full.replace (root, '')) : module.require ('path').relative
 
 /*  ------------------------------------------------------------------------ */
 
@@ -94,8 +95,7 @@ class StackTracey extends Array {
     }
 
     static relativePath (fullPath) {
-        return fullPath.replace (pathRoot, '')
-                       .replace (/^.*\:\/\/?\/?/, '')
+        return pathToRelative (pathRoot, fullPath).replace (/^.*\:\/\/?\/?/, '')
     }
 
     static isThirdParty (relativePath) {
