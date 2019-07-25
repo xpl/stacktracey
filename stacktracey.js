@@ -254,7 +254,7 @@ class StackTracey extends Array {
 StackTracey.maxColumnWidths = {
 
     callee:     30,
-    file:       40,
+    file:       60,
     sourceLine: 80
 }
 
