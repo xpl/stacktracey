@@ -146,18 +146,18 @@ describe ('StackTracey', () => {
         console.log ('')
         console.log (pretty, '\n')
 
-        const spaces = nodeVersion > 8 ? '        ' : '                      ';
+        //const spaces = nodeVersion > 8 ? '        ' : '                      ';
 
-        pretty.split ('\n')[0].should.equal ('at prettyTest' + spaces + 'test.js:144    const pretty = new StackTracey ().clean.pretty')
+        console.log (pretty.split ('\n')[0].match (/at prettyTest\s+test.js\:144\s+const pretty = new StackTracey \(\)\.clean\.pretty/))
     })
 
     it ('trims too long columns in the pretty printed output', () => {
 
         const stack = new StackTracey ([
-            { fileShort: 'dasdasdasdadadadasdasdasdadasdassdasdaddadasdas.js', line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
+            { fileShort: 'dasdasdasdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js', line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
         ])
 
-        stack.pretty.split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …adasdasdasdadasdassdasdaddadasdas.js:11  ')
+        stack.pretty.split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …asdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js:11  ')
     })
     
     it ('exposes Array methods', () => {
