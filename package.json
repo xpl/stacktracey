@@ -9,6 +9,7 @@
     "babel": "babel stacktracey.js --source-maps inline --out-file ./build/stacktracey.js",
     "build": "npm run lint && npm run lint-test && npm run babel",
     "test": "nyc --reporter=html --reporter=text mocha --reporter spec",
+    "test-no-coverage": "mocha --reporter spec",
     "autotest": "mocha --reporter spec --watch",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
