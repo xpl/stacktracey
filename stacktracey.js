@@ -109,9 +109,11 @@ class StackTracey extends Array {
 
         const lines = (str || '').split ('\n')
 
-        const entries = lines.map (line => { line = line.trim ()
+        const entries = lines.map (line => {
 
-            var callee, fileLineColumn = [], native, planA, planB
+            line = line.trim ()
+
+            let callee, fileLineColumn = [], native, planA, planB
 
             if ((planA = line.match (/at (.+) \((.+)\)/)) ||
                 (planA = line.match (/(.*)@(.*)/))) {
