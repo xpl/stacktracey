@@ -137,6 +137,12 @@ P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after t
 const prettyPrintedString = new StackTracey (error).pretty
 ```
 
+...or (for pretty printing cleaned output):
+
+```javascript
+const prettyPrintedString = new StackTracey (error).clean.pretty
+```
+
 It produces a nice compact table layout (thanks to [`as-table`](https://github.com/xpl/as-table)), supplied with source lines (if available):
 
 ```
