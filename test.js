@@ -35,9 +35,9 @@ describe ('StackTracey', () => {
 
         const stack = shouldBeVisibleInStackTrace ()
 
-        stack.should.be.an.instanceof (Array)
+        stack.should.be.an.instanceof (StackTracey)
 
-        stack[0].should.deep.equal ({
+        stack.items[0].should.deep.equal ({
             beforeParse: 'at shouldBeVisibleInStackTrace (' + path.join (process.cwd (), 'test.js') + ':32:47)',
             callee: 'shouldBeVisibleInStackTrace',
             index: false,
@@ -55,20 +55,20 @@ describe ('StackTracey', () => {
 
     it ('allows to read sources', () => {
 
-        const stack = shouldBeVisibleInStackTrace ().withSources // @hide
+        const stack = shouldBeVisibleInStackTrace ().withSources () // @hide
 
-              stack.should.be.an.instanceof (StackTracey)
-              stack[0].beforeParse.should.not.be.undefined // should preserve previous fields
-              stack[0].sourceLine.should.equal ('    const shouldBeVisibleInStackTrace = () => new StackTracey () ')
-              stack[0].hide.should.equal (true) // reads // @hide marker
-              stack[1].hide.should.equal (true) // reads // @hide marker
+        stack.should.be.an.instanceof (StackTracey)
+        stack.items[0].beforeParse.should.not.be.undefined // should preserve previous fields
+        stack.items[0].sourceLine.should.equal ('    const shouldBeVisibleInStackTrace = () => new StackTracey () ')
+        stack.items[0].hide.should.equal (true) // reads // @hide marker
+        stack.items[1].hide.should.equal (true) // reads // @hide marker
 
-        const cleanStack = stack.clean
+        const cleanStack = stack.clean ()
 
         cleanStack.should.be.an.instanceof (StackTracey)
 
-        StackTracey.locationsEqual (cleanStack[0], stack[0]).should.equal (true)  // should not clean top element
-        StackTracey.locationsEqual (cleanStack[1], stack[1]).should.equal (false) // should clean second element (due to // @hide)
+        StackTracey.locationsEqual (cleanStack.items[0], stack.items[0]).should.equal (true)  // should not clean top element
+        StackTracey.locationsEqual (cleanStack.items[1], stack.items[1]).should.equal (false) // should clean second element (due to // @hide)
     })
         
     it ('allows creation from array + groups duplicate lines', () => {
@@ -80,7 +80,7 @@ describe ('StackTracey', () => {
             { file: 'lol.js', line: 10, callee: '',              calleeShort: '' },
         ])
 
-        const clean = stack.clean.map (x => Object.assign ({
+        const clean = stack.clean ().map (x => Object.assign ({
                                                     file: x.file,
                                                     line: x.line,
                                                     callee: x.callee,
@@ -88,7 +88,7 @@ describe ('StackTracey', () => {
 
         clean.should.be.an.instanceof (StackTracey)
 
-        Array.from (clean).should.deep.equal ([ // .should does not recognize StackTracey as normal array...
+        clean.items.should.deep.equal ([ // .should does not recognize StackTracey as normal array...
 
             { file: 'yo.js',  line: 11, callee: 'a.funkktion',   calleeShort: 'a' },
             { file: 'yo.js',  line: 10, callee: 'foobar.boobar → foobar.boobar', calleeShort: 'foobar → foobar' },
@@ -99,16 +99,16 @@ describe ('StackTracey', () => {
     it ('handles inaccessible files', () => {
 
         const stack = shouldBeVisibleInStackTrace ()
-              stack[0].file = '^___^'
-              stack.withSources[0].sourceLine.should.equal ('')
-              stack.withSources[0].error.should.be.an.instanceof (Error)
+              stack.items[0].file = '^___^'
+              stack.withSources ().items[0].sourceLine.should.equal ('')
+              stack.withSourceAt (0).error.should.be.an.instanceof (Error)
     })
 
     it ('exposes some Array methods', () => {
 
         const stack = shouldBeVisibleInStackTrace ()
         const sliced = stack.slice (1)
-        const deltaLength = (stack.length - sliced.length)
+        const deltaLength = (stack.items.length - sliced.items.length)
 
         deltaLength.should.equal (1)
         sliced.should.be.an.instanceof (StackTracey)
@@ -127,10 +127,10 @@ describe ('StackTracey', () => {
 
             e.message.should.equal ('mkay')
 
-            const top = new StackTracey (e).withSources[0]
+            const top = new StackTracey (e).withSourceAt (0)
 
             top.line        .should.equal (4)
-            //top.column      .should.equal (23)
+            top.column      .should.equal (12)
             top.sourceLine  .should.equal ('\t\t\t\t\tthrow new Error (\'mkay\') }')
 
             top.file        .should.equal (path.resolve ('./test_files/mkay.js').replace (/\\/g, '/'))
@@ -141,7 +141,7 @@ describe ('StackTracey', () => {
 
     it ('pretty printing works', function prettyTest () {
 
-        const pretty = new StackTracey ().clean.pretty
+        const pretty = new StackTracey ().clean ().asTable ()
 
         console.log ('')
         console.log (pretty, '\n')
@@ -157,7 +157,7 @@ describe ('StackTracey', () => {
             { fileShort: 'dasdasdasdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js', line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
         ])
 
-        stack.pretty.split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …asdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js:11  ')
+        stack.asTable ().split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …asdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js:11  ')
     })
     
     it ('exposes Array methods', () => {
@@ -169,34 +169,31 @@ describe ('StackTracey', () => {
 
         const mapped = stack.map ((x, i) => Object.assign (x, { i }))
 
-        mapped.should.deep.equal ([ { file: 'foo', i: 0 }, { file: 'bar', i: 1 } ])
-        mapped.should.be.an.instanceof (Array)
+        mapped.items.should.deep.equal ([ { file: 'foo', i: 0 }, { file: 'bar', i: 1 } ])
         mapped.should.be.an.instanceof (StackTracey)
-
-        stack.reduce ((memo, x) => memo + x.file, '').should.equal ('foobar')
 
         const filtered = stack.filter (x => x.file === 'bar')
 
-        filtered.length.should.equal (1)
-        filtered[0].should.deep.equal ({ file: 'bar', i: 1 })
+        filtered.items.length.should.equal (1)
+        filtered.items[0].should.deep.equal ({ file: 'bar', i: 1 })
     })
 
     it ('computes relative path correctly', () => {
         
-        StackTracey.relativePath  ('webpack:///~/jquery/dist/jquery.js')
-                    .should.equal (            '~/jquery/dist/jquery.js')
+        StackTracey.prototype.relativePath ('webpack:///~/jquery/dist/jquery.js')
+                             .should.equal (            '~/jquery/dist/jquery.js')
 
-        StackTracey.relativePath  ('webpack:/webpack/bootstrap')
-                    .should.equal (          'webpack/bootstrap')
+        StackTracey.prototype.relativePath ('webpack:/webpack/bootstrap')
+                             .should.equal (          'webpack/bootstrap')
     })
 
     it ('computes short path correctly', () => {
 
-        StackTracey.shortenPath   ('webpack/bootstrap/jquery/dist/jquery.js')
-                    .should.equal ('jquery/dist/jquery.js')
+        StackTracey.prototype.shortenPath  ('webpack/bootstrap/jquery/dist/jquery.js')
+                             .should.equal ('jquery/dist/jquery.js')
 
-        StackTracey.shortenPath   ('node_modules/jquery/dist/jquery.js')
-                    .should.equal ('jquery/dist/jquery.js')
+        StackTracey.prototype.shortenPath  ('node_modules/jquery/dist/jquery.js')
+                             .should.equal ('jquery/dist/jquery.js')
     })
 
     if (nodeVersion >= 5) {
@@ -206,37 +203,45 @@ describe ('StackTracey', () => {
             try { require ('./test_files/syntax_error.js') }
             catch (e) {
 
-                const stack = new StackTracey (e).clean
+                const stack = new StackTracey (e).clean ()
 
                 console.log ('')
-                console.log (stack.pretty, '\n')
+                console.log (stack.asTable (), '\n')
 
-                stack[0].syntaxError.should.equal (true)
-                stack[0].column.should.equal (5)
+                stack.items[0].syntaxError.should.equal (true)
+                stack.items[0].column.should.equal (5)
                 
                 const spaces  = nodeVersion > 8 ? '    ' : '                  '
                 const spaces2 = nodeVersion > 8 ? (nodeVersion > 11 ? '         ' : '        ') : '  '
 
-                stack.pretty.split ('\n')[0].should.equal ('at (syntax error)' + spaces + 'test_files/syntax_error.js:2' + spaces2 + 'foo->bar ()                                     ')
+                stack.asTable ().split ('\n')[0].should.equal ('at (syntax error)' + spaces + 'test_files/syntax_error.js:2' + spaces2 + 'foo->bar ()                                     ')
             }
         })
     }
 
-    it ('implements StackTracey.isThirdParty', () => {
+    it ('allows to override isThirdParty()', () => {
 
-        StackTracey.isThirdParty.include (path => path === 'test.js')
+        class MyStackTracey extends StackTracey {
+            isThirdParty (path) {
+                return super.isThirdParty (path) || (path === 'test.js')
+            }
+        }
 
-        new StackTracey ()[0].thirdParty.should.equal (true)
+        new MyStackTracey ().items[0].thirdParty.should.equal (true)
 
-        StackTracey.isThirdParty.except (path => path === 'test.js')
+        class MyStackTracey2 extends MyStackTracey {
+            isThirdParty (path) {
+                return super.isThirdParty (path) && (path !== 'test.js')
+            }
+        }
         
-        new StackTracey ()[0].thirdParty.should.equal (false)
+        new MyStackTracey2 ().items[0].thirdParty.should.equal (false)
     })
 
-    it ('.withSource', () => {
+    it ('.withSourceAt', () => {
 
-        const line = new StackTracey ().withSource (0).sourceLine.trim ()
-        line.should.equal ('const line = new StackTracey ().withSource (0).sourceLine.trim ()')
+        const line = new StackTracey ().withSourceAt (0).sourceLine.trim ()
+        line.should.equal ('const line = new StackTracey ().withSourceAt (0).sourceLine.trim ()')
     })
 
     it ('.at', () => {
@@ -249,7 +254,7 @@ describe ('StackTracey', () => {
         const arr = [1,2,3]
         const stack = arr.reduce (() => new StackTracey ())
 
-        stack[1].native.should.equal (true)
+        stack.items[1].native.should.equal (true)
     })
 
     it ('works on Windows', () => {
@@ -265,13 +270,13 @@ describe ('StackTracey', () => {
                 ].join ('\n')
 
         const stack = new StackTracey (windowsStack)
-        const pretty = stack.pretty
+        const pretty = stack.asTable ()
         const lines = pretty.split ('\n')
 
         console.log ('')
         console.log (pretty, '\n')
 
-        lines[0].should.equal ('at it           test.js:38                 stack.should.be.an.instanceof (Array)')
+        lines[0].should.equal ('at it           test.js:38                 stack.should.be.an.instanceof (StackTracey)')
         lines[1].indexOf      ('at callFn       mocha/lib/runnable.js:354').should.equal (0)
     })
 

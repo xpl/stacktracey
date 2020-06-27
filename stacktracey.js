@@ -14,20 +14,13 @@ const O              = Object,
 
 /*  ------------------------------------------------------------------------ */
 
-class StackTracey extends Array {
+class StackTracey {
 
     constructor (input, offset) {
         
         const originalInput          = input
             , isParseableSyntaxError = input && (input instanceof SyntaxError && !isBrowser)
-        
-        super ()
-
-    /*  Fixes for Safari    */
-
-        this.constructor = StackTracey
-        this.__proto__   = StackTracey.prototype
-
+                
     /*  new StackTracey ()            */
 
         if (!input) {
@@ -38,13 +31,13 @@ class StackTracey extends Array {
     /*  new StackTracey (Error)      */
 
         if (input instanceof Error) {
-            input = input[StackTracey.stack] || input.stack || ''
+            input = input.stack || ''
         }
 
     /*  new StackTracey (string)     */
 
         if (typeof input === 'string') {
-            input = StackTracey.rawParse (input).slice (offset).map (StackTracey.extractEntryMetadata)
+            input = this.rawParse (input).slice (offset).map (x => this.extractEntryMetadata (x))
         }
 
     /*  new StackTracey (array)      */
@@ -53,7 +46,7 @@ class StackTracey extends Array {
 
             if (isParseableSyntaxError) {
                 
-                const rawLines   = module.require ('util').inspect (originalInput).split ('\n')
+                const rawLines = module.require ('util').inspect (originalInput).split ('\n')
                     , fileLine = rawLines[0].split (':')
                     , line = fileLine.pop ()
                     , file = fileLine.join (':')
@@ -70,42 +63,44 @@ class StackTracey extends Array {
                 }
             }
 
-            this.length = input.length
-            input.forEach ((x, i) => this[i] = x)
+            this.items = input
+
+        } else {
+            this.items = []
         }
     }
 
-    static extractEntryMetadata (e) {
+    extractEntryMetadata (e) {
         
-        const fileRelative = StackTracey.relativePath (e.file || '')
+        const fileRelative = this.relativePath (e.file || '')
 
         return O.assign (e, {
 
             calleeShort:  e.calleeShort || lastOf ((e.callee || '').split ('.')),
             fileRelative: fileRelative,
-            fileShort:    StackTracey.shortenPath (fileRelative),
+            fileShort:    this.shortenPath (fileRelative),
             fileName:     lastOf ((e.file || '').split ('/')),
-            thirdParty:   StackTracey.isThirdParty (fileRelative) && !e.index
+            thirdParty:   this.isThirdParty (fileRelative) && !e.index
         })
     }
 
-    static shortenPath (relativePath) {
+    shortenPath (relativePath) {
         return relativePath.replace (/^node_modules\//, '')
                            .replace (/^webpack\/bootstrap\//, '')
     }
 
-    static relativePath (fullPath) {
+    relativePath (fullPath) {
         return nixSlashes (pathToRelative (pathRoot, fullPath)).replace (/^.*\:\/\/?\/?/, '')
     }
 
-    static isThirdParty (relativePath) {
+    isThirdParty (relativePath) {
         return (relativePath[0] === '~')                          || // webpack-specific heuristic
                (relativePath[0] === '/')                          || // external source
                (relativePath.indexOf ('node_modules')      === 0) ||
                (relativePath.indexOf ('webpack/bootstrap') === 0)
     }
 
-    static rawParse (str) {
+    rawParse (str) {
 
         const lines = (str || '').split ('\n')
 
@@ -153,11 +148,11 @@ class StackTracey extends Array {
         return entries.filter (x => (x !== undefined))
     }
 
-    withSource (i) {
-        return this[i] && StackTracey.withSource (this[i])
+    withSourceAt (i) {
+        return this.items[i] && this.withSource (this.items[i])
     }
 
-    static withSource (loc) {
+    withSource (loc) {
 
         if (loc.sourceFile || (loc.file && loc.file.indexOf ('<') >= 0)) { // skip things like <anonymous> and stuff that was already fetched
             return loc
@@ -172,7 +167,7 @@ class StackTracey extends Array {
 
             if (!resolved.sourceFile.error) {
                 resolved.file = nixSlashes (resolved.sourceFile.path)
-                resolved = StackTracey.extractEntryMetadata (resolved)
+                resolved = this.extractEntryMetadata (resolved)
             }
 
             if (!resolved.sourceLine.error) {
@@ -190,25 +185,28 @@ class StackTracey extends Array {
         }
     }
 
-    get withSources () {
-        return new StackTracey (this.map (StackTracey.withSource))
+    withSources () {
+        return this.map (x => this.withSource (x))
     }
 
-    get mergeRepeatedLines () {
+    mergeRepeatedLines () {
         return new StackTracey (
-            partition (this, e => e.file + e.line).map (
+            partition (this.items, e => e.file + e.line).map (
                 group => {
                     return group.items.slice (1).reduce ((memo, entry) => {
                         memo.callee      = (memo.callee      || '<anonymous>') + ' → ' + (entry.callee      || '<anonymous>')
                         memo.calleeShort = (memo.calleeShort || '<anonymous>') + ' → ' + (entry.calleeShort || '<anonymous>')
-                        return memo }, O.assign ({}, group.items[0]))
+                        return memo
+                    }, O.assign ({}, group.items[0]))
                 }
             )
         )
     }
 
-    get clean () {
-        return this.withSources.mergeRepeatedLines.filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide || e.native))
+    clean () {
+        return this.withSources ()
+                   .mergeRepeatedLines ()
+                   .filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide || e.native))
     }
 
     at (i) {
@@ -222,7 +220,38 @@ class StackTracey extends Array {
             line:        0,
             column:      0
 
-        }, this[i])
+        }, this.items[i])
+    }
+
+    asTable (opts) {
+        const maxColumnWidths = (opts && opts.maxColumnWidths) || this.maxColumnWidths ()
+
+        const trimEnd   = (s, n) => s && ((s.length > n) ? (s.slice (0, n-1) + '…') : s)   
+        const trimStart = (s, n) => s && ((s.length > n) ? ('…' + s.slice (-(n-1))) : s)
+
+        const trimmed = this.withSources ().map (
+            e => [
+                ('at ' + trimEnd (e.calleeShort,                                maxColumnWidths.callee)),
+                trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', maxColumnWidths.file),
+                trimEnd (((e.sourceLine || '').trim () || ''),                  maxColumnWidths.sourceLine)
+            ]
+        )
+
+        return asTable (trimmed.items)
+    }
+
+    maxColumnWidths () {
+        return {
+            callee:     30,
+            file:       60,
+            sourceLine: 80
+        }
+    }
+
+    static resetCache () {
+
+        getSource.resetCache ()
+        getSource.async.resetCache ()
     }
 
     static locationsEqual (a, b) {
@@ -230,80 +259,19 @@ class StackTracey extends Array {
                (a.line   === b.line) &&
                (a.column === b.column)
     }
-
-    get pretty () {
-
-        const trimEnd   = (s, n) => s && ((s.length > n) ? (s.slice (0, n-1) + '…') : s)   
-        const trimStart = (s, n) => s && ((s.length > n) ? ('…' + s.slice (-(n-1))) : s)
-
-        return asTable (this.withSources.map (
-                            e => [
-                                ('at ' + trimEnd (e.calleeShort,                                StackTracey.maxColumnWidths.callee)),
-                                trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', StackTracey.maxColumnWidths.file),
-                                trimEnd (((e.sourceLine || '').trim () || ''),                  StackTracey.maxColumnWidths.sourceLine)
-                            ]))
-    }
-
-    static resetCache () {
-
-        getSource.resetCache ()
-    }
 }
-
-/*  Some default configuration options
-    ------------------------------------------------------------------------ */
-
-StackTracey.maxColumnWidths = {
-
-    callee:     30,
-    file:       60,
-    sourceLine: 80
-}
-
-/*  Chaining helper for .isThirdParty
-    ------------------------------------------------------------------------ */
-
-;(() => {
-
-    const methods = {
-
-        include (pred) {
-
-            const f = StackTracey.isThirdParty
-            O.assign (StackTracey.isThirdParty = (path => f (path) ||  pred (path)), methods)
-        },
-
-        except (pred) {
-
-            const f = StackTracey.isThirdParty
-            O.assign (StackTracey.isThirdParty = (path => f (path) && !pred (path)), methods)
-        },
-    }
-
-    O.assign (StackTracey.isThirdParty, methods)
-
-}) ()
 
 /*  Array methods
     ------------------------------------------------------------------------ */
 
-;['map', 'filter', 'slice', 'concat', 'reverse'].forEach (name => {
+;['map', 'filter', 'slice', 'concat'].forEach (method => {
 
-    StackTracey.prototype[name] = function (/*...args */) { // no support for ...args in Node v4 :(
-        
-        const arr = Array.from (this)
-        return new StackTracey (arr[name].apply (arr, arguments))
+    StackTracey.prototype[method] = function (/*...args */) { // no support for ...args in Node v4 :(
+        return new StackTracey (this.items[method].apply (this.items, arguments))
     }
 })
-
-/*  A private field that an Error instance can expose
-    ------------------------------------------------------------------------ */
-
-StackTracey.stack = /* istanbul ignore next */ (typeof Symbol !== 'undefined') ? Symbol.for ('StackTracey') : '__StackTracey'
 
 /*  ------------------------------------------------------------------------ */
 
 module.exports = StackTracey
-
-/*  ------------------------------------------------------------------------ */
 
