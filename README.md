@@ -30,7 +30,7 @@ npm install stacktracey
 ```
 
 ```javascript
-StackTracey = require ('stacktracey')
+import StackTracey from 'stacktracey'
 ```
 
 Captures the current call stack:
@@ -42,16 +42,15 @@ stack = new StackTracey ()            // captures the current call stack
 Parses stacks from an `Error` object:
 
 ```javascript
-stack = new StackTracey (error)       // parses error.stack
-stack = new StackTracey (error.stack) // raw string
+stack = new StackTracey (error)
+stack = new StackTracey (error.stack) // ...or from raw string
 ```
 
-It is an array instance:
+Stores parsed data in `.items`:
 
 ```javascript
-stack instanceof Array // returns true
-stack.length           // num entries
-stack[0]               // top
+stack.items.length // num entries
+stack.items[0]     // top
 ```
 
 ...where each item exposes:
@@ -79,23 +78,23 @@ stack[0]               // top
 Accessing sources:
 
 ```javascript
-stack = stack.withSources // will return a copy of stack with all items supplied with sources
-top   = stack[0]          // top item
+stack = stack.withSources () // returns a copy of stack with all items supplied with sources
+top   = stack.items[0]       // top item
 ```
 
 ...or:
 
 ```javascript
-top = stack.withSource (0) // supplies source for an individiual item
+top = stack.withSourceAt (0) // supplies source for an individiual item (by index)
 ```
 
 ...or:
 
 ```javascript
-top = StackTracey.withSource (stack[0]) // supplies source for an individiual item
+top = stack.withSource (stack.items[0]) // supplies source for an individiual item
 ```
 
-It will return an item supplied with the source code info (already mapped through sourcemaps):
+The returned items contain the following additional fields (already mapped through sourcemaps):
 
 ```javascript
 {
@@ -113,34 +112,45 @@ To learn about the `sourceFile` object, read the [get-source](https://github.com
 ## Cleaning Output
 
 ```javascript
-stack = stack.withSources.clean
+stack = stack.clean ()
 ```
 
-1. Excludes locations marked with the `isThirdParty` flag (library calls)
-2. Excludes locations marked with a `// @hide` comment (user defined exclusion)
-3. Merges repeated lines (via the `.mergeRepeatedLines`)
+It does the following:
 
-You can augment the global `isThirdParty` predicate with new rules:
+1. Reads sources (if available)
+2. Excludes locations marked with the `isThirdParty` flag (library calls)
+3. Excludes locations marked with a `// @hide` comment (user defined exclusion)
+4. Merges repeated lines (via the `.mergeRepeatedLines`)
 
-```javascript
-StackTracey.isThirdParty.include (path => path.includes ('my-lib')) // paths including 'my-lib' will be marked as thirdParty
+## Custom `isThirdParty` Predicate
+
+You can override the `isThirdParty` behavior by subclassing `StackTracey`:
+
 ```
-```javascript
-StackTracey.isThirdParty.except (path => path.includes ('jquery')) // jquery paths won't be marked as thirdParty
-```
+class MyStackTracey extends StackTracey {
 
-P.S. It is better to call `.clean` on stacks supplied with sources (i.e. after the `.withSources`), to make the `// @hide` magic work, and to make third-party recognition work by reading proper file names in case if your source is compiled from other sources (and has a sourcemap attached).
+    isThirdParty (path) {
+        return (super.isThirdParty (path)    // include default behavior
+                || path.includes ('my-lib')) // paths including 'my-lib' will be marked as thirdParty
+                && !path.includes ('jquery') // jquery paths won't be marked as thirdParty
+    }
+}
+
+...
+
+const stack = new MyStackTracey (error).withSources ()
+```
 
 ## Pretty Printing
 
 ```javascript
-const prettyPrintedString = new StackTracey (error).pretty
+const prettyPrintedString = new StackTracey (error).asTable ()
 ```
 
 ...or (for pretty printing cleaned output):
 
 ```javascript
-const prettyPrintedString = new StackTracey (error).clean.pretty
+const prettyPrintedString = new StackTracey (error).clean ().asTable ()
 ```
 
 It produces a nice compact table layout (thanks to [`as-table`](https://github.com/xpl/as-table)), supplied with source lines (if available):
@@ -158,6 +168,18 @@ at next                            mocha/lib/runner.js:284    return fn();
 at <anonymous>                     mocha/lib/runner.js:320    next(0);                  
 ```
 
+If you find your pretty printed tables undesirably trimmed (or maybe too long to fit in the line), you can provide custom column widths when calling `asTable` (...or, alternatively, by overriding `maxColumnWidths ()` method):
+
+```javascript
+stack.asTable ({
+    callee:     30,
+    file:       60,
+    sourceLine: 80
+})
+```
+
+## Using As Custom Exception Printer In Node
+
 You can even replace the default NodeJS exception printer with this! This is how you can do it:
 
 ```javascript
@@ -174,19 +196,6 @@ const log = require ('ololog').handleNodeErrors ()
 ```
 
 <img width="1066" alt="screen shot 2018-05-11 at 19 51 03" src="https://user-images.githubusercontent.com/1707/39936393-ffd529c2-5554-11e8-80f8-eff1229017c4.png">
-
-### Overriding Max Column Widths in Pretty Printed Tables
-
-If you get your pretty printed tables undesirably trimmed, you can try changing these numbers:
-
-```javascript
-StackTracey.maxColumnWidths = {
-
-    callee:     30,
-    file:       40,
-    sourceLine: 80
-}
-```
  
 ## Parsing `SyntaxError` instances
 
@@ -211,25 +220,12 @@ at processImmediate [as _immediat  timers.js:714
 
 ## Array Methods
 
-All StackTracey instances expose `map`, `filter`, `concat`, `reverse` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced stacks, respectively:
+All StackTracey instances expose `map`, `filter`, `concat` and `slice` methods. These methods will return mapped, filtered, joined, reversed and sliced `StackTracey` instances, respectively:
 
 ```javascript
-s = new StackTracey ().slice (1).filter (x => !x.isThirdParty) // current stack shifted by 1 and cleaned from library calls
+s = new StackTracey ().slice (1).filter (x => !x.thirdParty) // current stack shifted by 1 and cleaned from library calls
 
 s instanceof StackTracey // true
-s instanceof Array       // true
-```
-
-Other methods of the `Array` are supported too, but they will return `Array` instances, not StackTracey instances. You can convert from array via this:
-
-```javascript
-stack = new StackTracey (array)
-```
-
-..and to array via this (but generally this is not needed — you can pass around StackTracey instances as if they were real Arrays):
-
-```javascript
-Array.from (stack)
 ```
 
 ## Extra Stuff
@@ -240,7 +236,7 @@ You can compare two locations via this predicate (tests `file`, `line` and `colu
 StackTracey.locationsEqual (a, b)
 ```
 
-Resetting source cache (calls `getSource.resetCache ()` from [get-source](https://github.com/xpl/get-source)):
+To force-reload the sources, you can invalidate the global source cache (calls `getSource.resetCache ()` from [get-source](https://github.com/xpl/get-source)):
 
 ```javascript
 StackTracey.resetCache ()
