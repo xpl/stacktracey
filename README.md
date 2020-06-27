@@ -126,7 +126,7 @@ It does the following:
 
 You can override the `isThirdParty` behavior by subclassing `StackTracey`:
 
-```
+```javascript
 class MyStackTracey extends StackTracey {
 
     isThirdParty (path) {
