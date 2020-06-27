@@ -1,7 +1,8 @@
 # Version 2.0 (breaking changes)
 
 - All property accessors like `.clean` are now methods (e.g. `.clean ()`) for consistency reasons
-    - `.pretty` now `.asTable (opts?: { maxColumnWidths:? { callee, file, sourceLine } })`
+
+- `.pretty` now `.asTable (opts?: { maxColumnWidths:? { callee, file, sourceLine } })`
 
 - It is no longer `extends Array` due to non-working user subclassing with Babel ES5
     - Use `.items` to access original array

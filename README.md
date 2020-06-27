@@ -178,7 +178,7 @@ stack.asTable ({
 })
 ```
 
-## Using As Custom Exception Printer In Node
+## Using As A Custom Exception Printer In Node
 
 You can even replace the default NodeJS exception printer with this! This is how you can do it:
 
