@@ -170,15 +170,14 @@ class StackTracey {
                 resolved = this.extractEntryMetadata (resolved)
             }
 
-            if (!resolved.sourceLine.error) {
-                if (resolved.sourceLine.includes ('// @hide')) {
-                    resolved.sourceLine = resolved.sourceLine.replace  ('// @hide', '')
-                    resolved.hide       = true
-                }
-                if (resolved.sourceLine.includes ('__webpack_require__') || // webpack-specific heuristics
-                    resolved.sourceLine.includes ('/******/ ({')) {
-                    resolved.thirdParty = true
-                }
+            if (resolved.sourceLine.includes ('// @hide')) {
+                resolved.sourceLine = resolved.sourceLine.replace  ('// @hide', '')
+                resolved.hide       = true
+            }
+            
+            if (resolved.sourceLine.includes ('__webpack_require__') || // webpack-specific heuristics
+                resolved.sourceLine.includes ('/******/ ({')) {
+                resolved.thirdParty = true
             }
 
             return O.assign ({ sourceLine: '' }, loc, resolved)
