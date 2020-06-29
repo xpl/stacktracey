@@ -201,10 +201,10 @@ describe ('StackTracey', () => {
     it ('computes relative path correctly', () => {
         
         StackTracey.prototype.relativePath ('webpack:///~/jquery/dist/jquery.js')
-                             .should.equal (            '~/jquery/dist/jquery.js')
+                             .should.equal (           '~/jquery/dist/jquery.js')
 
         StackTracey.prototype.relativePath ('webpack:/webpack/bootstrap')
-                             .should.equal (          'webpack/bootstrap')
+                             .should.equal (         'webpack/bootstrap')
     })
 
     it ('computes short path correctly', () => {

@@ -187,7 +187,7 @@ class StackTracey {
     }
 
     shouldSkipResolving (loc) {
-        return loc.sourceFile || (loc.file && loc.file.indexOf ('<') >= 0) // skip things like <anonymous> and stuff that was already fetched
+        return loc.sourceFile || loc.error || (loc.file && loc.file.indexOf ('<') >= 0) // skip things like <anonymous> and stuff that was already fetched
     }
 
     withSourceResolved (loc, resolved) {
