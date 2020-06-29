@@ -1,4 +1,6 @@
-# Version 2.0 (breaking changes)
+# Version 2.0 (with breaking changes)
+
+- Added asynchronous methods, `withSourcesAsync` and `cleanAsync`.
 
 - All property accessors like `.clean` are now methods (e.g. `.clean ()`) for consistency reasons
 
