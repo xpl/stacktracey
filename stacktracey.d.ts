@@ -53,12 +53,19 @@ declare class StackTracey {
     rawParse (str: string): Entry[]
 
     withSourceAt (i: number): Entry
+    withSourceAsyncAt (i: number): Promise<Entry>
 
     withSource (entry: Entry): Entry
+    withSourceAsync (entry: Entry): Promise<Entry>
 
     withSources ():        StackTracey
+    withSourcesAsync ():   Promise<StackTracey>
     mergeRepeatedLines (): StackTracey
+
     clean ():              StackTracey
+    cleanAsync ():         StackTracey
+
+    isClean (entry: Entry, index: number): boolean
 
     map    (f: (x: Entry, i: number, arr: Entry[]) => Entry): StackTracey
     filter (f: (x: Entry, i: number, arr: Entry[]) => Entry): StackTracey
