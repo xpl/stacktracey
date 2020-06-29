@@ -150,7 +150,7 @@ You can customize its behavior by overriding the `isClean (entry, index)` predic
 
 You can override the `isThirdParty` behavior by subclassing `StackTracey`:
 
-```
+```javascript
 class MyStackTracey extends StackTracey {
 
     isThirdParty (path) {
