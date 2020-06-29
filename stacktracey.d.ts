@@ -63,7 +63,7 @@ declare class StackTracey {
     mergeRepeatedLines (): StackTracey
 
     clean ():              StackTracey
-    cleanAsync ():         StackTracey
+    cleanAsync ():         Promise<StackTracey>
 
     isClean (entry: Entry, index: number): boolean
 
