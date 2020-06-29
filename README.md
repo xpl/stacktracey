@@ -174,7 +174,10 @@ const prettyPrintedString = new StackTracey (error).asTable ()
 ...or (for pretty printing cleaned output):
 
 ```javascript
-const prettyPrintedString = new StackTracey (error).clean ().asTable ()
+const prettyPrintedString = new StackTracey (error).clean ().asTable () // NB: synchronously reads sources, use .cleanAsync for doing it async
+```
+```javascript
+const prettyPrintedString = (await new StackTracey (error).cleanAsync ()).asTable () // asynchronous version
 ```
 
 It produces a nice compact table layout (thanks to [`as-table`](https://github.com/xpl/as-table)), supplied with source lines (if available):
@@ -260,7 +263,7 @@ You can compare two locations via this predicate (tests `file`, `line` and `colu
 StackTracey.locationsEqual (a, b)
 ```
 
-To force-reload the sources, you can invalidate the global source cache (calls `getSource.resetCache ()` from [get-source](https://github.com/xpl/get-source)):
+To force-reload the sources, you can invalidate the global source cache:
 
 ```javascript
 StackTracey.resetCache ()
