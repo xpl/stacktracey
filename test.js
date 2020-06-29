@@ -70,7 +70,28 @@ describe ('StackTracey', () => {
         StackTracey.locationsEqual (cleanStack.items[0], stack.items[0]).should.equal (true)  // should not clean top element
         StackTracey.locationsEqual (cleanStack.items[1], stack.items[1]).should.equal (false) // should clean second element (due to // @hide)
     })
-        
+    
+
+    it ('allows to read sources (async)', () => {
+
+        return shouldBeVisibleInStackTrace ().withSourcesAsync ().then (stack => { // @hide
+
+            stack.should.be.an.instanceof (StackTracey)
+            stack.items[0].beforeParse.should.not.be.undefined // should preserve previous fields
+            stack.items[0].sourceLine.should.equal ('    const shouldBeVisibleInStackTrace = () => new StackTracey () ')
+            stack.items[0].hide.should.equal (true) // reads // @hide marker
+            stack.items[1].hide.should.equal (true) // reads // @hide marker
+
+            return stack.cleanAsync ().then (cleanStack => {
+
+                cleanStack.should.be.an.instanceof (StackTracey)
+
+                StackTracey.locationsEqual (cleanStack.items[0], stack.items[0]).should.equal (true)  // should not clean top element
+                StackTracey.locationsEqual (cleanStack.items[1], stack.items[1]).should.equal (false) // should clean second element (due to // @hide)
+            })
+        })
+    })
+
     it ('allows creation from array + groups duplicate lines', () => {
 
         const stack = new StackTracey ([

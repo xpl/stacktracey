@@ -10,7 +10,8 @@ Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & b
 - [x] Works in Node and browsers, \*nix and Windows
 - [x] Allows hiding library calls / ad-hoc exclusion (via `// @hide` marker)
 - [x] Provides source text for call locations
-- [x] Fetches sources synchronously (even in browsers) via [get-source](https://github.com/xpl/get-source)
+- [x] Fetches sources (via [get-source](https://github.com/xpl/get-source))
+- [x] Supports both asynchronous and synchronous interfaces (works even in browsers)
 - [x] Full sourcemap support
 - [x] Extracts useful information from `SyntaxError` instances
 - [x] [Pretty printing](https://github.com/xpl/stacktracey/#pretty-printing)
@@ -75,11 +76,18 @@ stack.items[0]     // top
 }
 ```
 
-Accessing sources:
+Accessing sources (**synchronously**, use with caution in browsers):
 
 ```javascript
 stack = stack.withSources () // returns a copy of stack with all items supplied with sources
 top   = stack.items[0]       // top item
+```
+
+Accessing sources (**asynchronously**, preferred method in browsers):
+
+```javascript
+stack = await stack.withSourcesAsync () // returns a copy of stack with all items supplied with sources
+top   = stack.items[0]                  // top item
 ```
 
 ...or:
@@ -87,11 +95,17 @@ top   = stack.items[0]       // top item
 ```javascript
 top = stack.withSourceAt (0) // supplies source for an individiual item (by index)
 ```
+```javascript
+top = await stack.withSourceAsyncAt (0) // supplies source for an individiual item (by index)
+```
 
 ...or:
 
 ```javascript
 top = stack.withSource (stack.items[0]) // supplies source for an individiual item
+```
+```javascript
+top = await stack.withSourceAsync (stack.items[0]) // supplies source for an individiual item
 ```
 
 The returned items contain the following additional fields (already mapped through sourcemaps):
@@ -111,8 +125,16 @@ To learn about the `sourceFile` object, read the [get-source](https://github.com
 
 ## Cleaning Output
 
+Synchronously (use with caution in browsers):
+
 ```javascript
 stack = stack.clean ()
+```
+
+...or (asynchronously):
+
+```javascript
+stack = await stack.cleanAsync ()
 ```
 
 It does the following:
@@ -121,6 +143,8 @@ It does the following:
 2. Excludes locations marked with the `isThirdParty` flag (library calls)
 3. Excludes locations marked with a `// @hide` comment (user defined exclusion)
 4. Merges repeated lines (via the `.mergeRepeatedLines`)
+
+You can customize its behavior by overriding the `isClean (entry, index)` predicate.
 
 ## Custom `isThirdParty` Predicate
 

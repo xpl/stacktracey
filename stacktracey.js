@@ -71,7 +71,7 @@ class StackTracey {
     }
 
     extractEntryMetadata (e) {
-        
+
         const fileRelative = this.relativePath (e.file || '')
 
         return O.assign (e, {
@@ -152,9 +152,13 @@ class StackTracey {
         return this.items[i] && this.withSource (this.items[i])
     }
 
-    withSource (loc) {
+    withSourceAsyncAt (i) {
+        return this.items[i] && this.withSourceAsync (this.items[i])
+    }
 
-        if (loc.sourceFile || (loc.file && loc.file.indexOf ('<') >= 0)) { // skip things like <anonymous> and stuff that was already fetched
+    withSource (loc) {
+        
+        if (this.shouldSkipResolving (loc)) {
             return loc
             
         } else {
@@ -165,27 +169,54 @@ class StackTracey {
                 return loc
             }
 
-            if (!resolved.sourceFile.error) {
-                resolved.file = nixSlashes (resolved.sourceFile.path)
-                resolved = this.extractEntryMetadata (resolved)
-            }
-
-            if (resolved.sourceLine.includes ('// @hide')) {
-                resolved.sourceLine = resolved.sourceLine.replace  ('// @hide', '')
-                resolved.hide       = true
-            }
-            
-            if (resolved.sourceLine.includes ('__webpack_require__') || // webpack-specific heuristics
-                resolved.sourceLine.includes ('/******/ ({')) {
-                resolved.thirdParty = true
-            }
-
-            return O.assign ({ sourceLine: '' }, loc, resolved)
+            return this.withSourceResolved (loc, resolved)
         }
+    }
+
+    withSourceAsync (loc) {
+
+        if (this.shouldSkipResolving (loc)) {
+            return Promise.resolve (loc)
+            
+        } else {
+            return getSource.async (loc.file || '')
+                        .then (x => x.resolve (loc))
+                        .then (resolved => this.withSourceResolved (loc, resolved))
+                        .catch (e => this.withSourceResolved (loc, { error: e, sourceLine: '' }))
+        }
+    }
+
+    shouldSkipResolving (loc) {
+        return loc.sourceFile || (loc.file && loc.file.indexOf ('<') >= 0) // skip things like <anonymous> and stuff that was already fetched
+    }
+
+    withSourceResolved (loc, resolved) {
+
+        if (resolved.sourceFile && !resolved.sourceFile.error) {
+            resolved.file = nixSlashes (resolved.sourceFile.path)
+            resolved = this.extractEntryMetadata (resolved)
+        }
+
+        if (resolved.sourceLine.includes ('// @hide')) {
+            resolved.sourceLine = resolved.sourceLine.replace  ('// @hide', '')
+            resolved.hide       = true
+        }
+
+        if (resolved.sourceLine.includes ('__webpack_require__') || // webpack-specific heuristics
+            resolved.sourceLine.includes ('/******/ ({')) {
+            resolved.thirdParty = true
+        }
+
+        return O.assign ({ sourceLine: '' }, loc, resolved)
     }
 
     withSources () {
         return this.map (x => this.withSource (x))
+    }
+
+    withSourcesAsync () {
+        return Promise.all (this.items.map (x => this.withSourceAsync (x)))
+                      .then (items => new StackTracey (items))
     }
 
     mergeRepeatedLines () {
@@ -203,9 +234,19 @@ class StackTracey {
     }
 
     clean () {
-        return this.withSources ()
-                   .mergeRepeatedLines ()
-                   .filter ((e, i) => (i === 0) || !(e.thirdParty || e.hide || e.native))
+        const s = this.withSources ().mergeRepeatedLines ()
+        return s.filter (s.isClean.bind (s))
+    }
+
+    cleanAsync () {
+        return this.withSourcesAsync ().then (s => {
+            s = s.mergeRepeatedLines ()
+            return s.filter (s.isClean.bind (s))
+        })
+    }
+
+    isClean (entry, index) {
+        return (index === 0) || !(entry.thirdParty || entry.hide || entry.native)
     }
 
     at (i) {
@@ -223,6 +264,7 @@ class StackTracey {
     }
 
     asTable (opts) {
+
         const maxColumnWidths = (opts && opts.maxColumnWidths) || this.maxColumnWidths ()
 
         const trimEnd   = (s, n) => s && ((s.length > n) ? (s.slice (0, n-1) + '…') : s)   
@@ -254,6 +296,7 @@ class StackTracey {
     }
 
     static locationsEqual (a, b) {
+
         return (a.file   === b.file) &&
                (a.line   === b.line) &&
                (a.column === b.column)
