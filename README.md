@@ -168,13 +168,16 @@ const stack = new MyStackTracey (error).withSources ()
 ## Pretty Printing
 
 ```javascript
-const prettyPrintedString = new StackTracey (error).asTable ()
+const prettyPrintedString = new StackTracey (error).withSources ().asTable ()
+```
+```javascript
+const prettyPrintedString = (await new StackTracey (error).withSourcesAsync ()).asTable () // asynchronous version
 ```
 
 ...or (for pretty printing cleaned output):
 
 ```javascript
-const prettyPrintedString = new StackTracey (error).clean ().asTable () // NB: synchronously reads sources, use .cleanAsync for doing it async
+const prettyPrintedString = new StackTracey (error).clean ().asTable ()
 ```
 ```javascript
 const prettyPrintedString = (await new StackTracey (error).cleanAsync ()).asTable () // asynchronous version
