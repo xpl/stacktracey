@@ -177,7 +177,7 @@ const prettyPrintedString = new StackTracey (error).asTable ()
 const prettyPrintedString = new StackTracey (error).clean ().asTable () // NB: synchronously reads sources, use .cleanAsync for doing it async
 ```
 ```javascript
-const prettyPrintedString = await (new StackTracey (error).cleanAsync ()).asTable () // asynchronous version
+const prettyPrintedString = (await new StackTracey (error).cleanAsync ()).asTable () // asynchronous version
 ```
 
 It produces a nice compact table layout (thanks to [`as-table`](https://github.com/xpl/as-table)), supplied with source lines (if available):
