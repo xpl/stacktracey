@@ -270,7 +270,7 @@ class StackTracey {
         const trimEnd   = (s, n) => s && ((s.length > n) ? (s.slice (0, n-1) + '…') : s)   
         const trimStart = (s, n) => s && ((s.length > n) ? ('…' + s.slice (-(n-1))) : s)
 
-        const trimmed = this.withSources ().map (
+        const trimmed = this.map (
             e => [
                 ('at ' + trimEnd (e.calleeShort,                                maxColumnWidths.callee)),
                 trimStart ((e.fileShort && (e.fileShort + ':' + e.line)) || '', maxColumnWidths.file),

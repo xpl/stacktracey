@@ -177,7 +177,7 @@ describe ('StackTracey', () => {
             { fileShort: 'dasdasdasdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js', line: 11, calleeShort: 'dadasdasdasdasdasdasdasdasdasdasdasdasd' },
         ])
 
-        stack.asTable ().split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …asdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js:11  ')
+        stack.withSources ().asTable ().split ('\n')[0].should.equal ('at dadasdasdasdasdasdasdasdasdas…  …asdadadadasdasdasdasdasddasdsadadasdassdasdaddadasdas.js:11  ')
     })
     
     it ('exposes Array methods', () => {
@@ -290,7 +290,7 @@ describe ('StackTracey', () => {
                 ].join ('\n')
 
         const stack = new StackTracey (windowsStack)
-        const pretty = stack.asTable ()
+        const pretty = stack.withSources ().asTable ()
         const lines = pretty.split ('\n')
 
         console.log ('')
