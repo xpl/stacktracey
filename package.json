@@ -1,6 +1,6 @@
 {
   "name": "stacktracey",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & browsers.",
   "main": "stacktracey",
   "types": "./stacktracey.d.ts",
