@@ -44,7 +44,7 @@ declare class StackTracey {
 
     items: Entry[]
 
-    extractEntryMetadata (e: Entry)
+    extractEntryMetadata (e: Entry): Entry
 
     shortenPath (relativePath: string): string
     relativePath (fullPath: string): string
