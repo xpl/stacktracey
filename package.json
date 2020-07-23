@@ -85,6 +85,6 @@
   },
   "dependencies": {
     "as-table": "^1.0.36",
-    "get-source": "^2.0.8"
+    "get-source": "^2.0.10"
   }
 }
