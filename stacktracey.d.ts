@@ -67,10 +67,10 @@ declare class StackTracey {
 
     isClean (entry: Entry, index: number): boolean
 
-    map    (f: (x: Entry, i: number, arr: Entry[]) => Entry): StackTracey
-    filter (f: (x: Entry, i: number, arr: Entry[]) => Entry): StackTracey
-    slice  (from?: number, to?: number):                      StackTracey
-    concat (...args: Entry[]):                                StackTracey
+    map    (f: (x: Entry, i: number, arr: Entry[]) => Entry):   StackTracey
+    filter (f: (x: Entry, i: number, arr: Entry[]) => boolean): StackTracey
+    slice  (from?: number, to?: number):                        StackTracey
+    concat (...args: Entry[]):                                  StackTracey
 
     at (i: number): Entry
 
