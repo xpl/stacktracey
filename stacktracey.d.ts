@@ -28,9 +28,9 @@ declare class StackTracey {
     isClean (entry: StackTracey.Entry, index: number): boolean
 
     map    (f: (x: StackTracey.Entry, i: number, arr: StackTracey.Entry[]) => StackTracey.Entry):   StackTracey
-    filter (f: (x: StackTracey.Entry, i: number, arr: StackTracey.Entry[]) => boolean): StackTracey
-    slice  (from?: number, to?: number):                        StackTracey
-    concat (...args: StackTracey.Entry[]):                                  StackTracey
+    filter (f: (x: StackTracey.Entry, i: number, arr: StackTracey.Entry[]) => boolean):             StackTracey
+    slice  (from?: number, to?: number):                                                            StackTracey
+    concat (...args: StackTracey.Entry[]):                                                          StackTracey
 
     at (i: number): StackTracey.Entry
 
