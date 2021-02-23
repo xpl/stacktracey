@@ -87,6 +87,7 @@ class StackTracey {
     shortenPath (relativePath) {
         return relativePath.replace (/^node_modules\//, '')
                            .replace (/^webpack\/bootstrap\//, '')
+                           .replace (/^__parcel_source_root\//, '')
     }
 
     relativePath (fullPath) {
