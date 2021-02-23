@@ -4,13 +4,14 @@
 
 const O              = Object,
       isBrowser      = (typeof window !== 'undefined') && (window.window === window) && window.navigator,
+      nodeRequire    = isBrowser ? null : module.require, // to prevent bundlers from expanding the require call
       lastOf         = x => x[x.length - 1],
       getSource      = require ('get-source'),
       partition      = require ('./impl/partition'),
       asTable        = require ('as-table'),
       nixSlashes     = x => x.replace (/\\/g, '/'),
       pathRoot       = isBrowser ? window.location.href : (nixSlashes (process.cwd ()) + '/'),
-      pathToRelative = isBrowser ? ((root, full) => full.replace (root, '')) : module.require ('path').relative
+      pathToRelative = isBrowser ? ((root, full) => full.replace (root, '')) : nodeRequire ('path').relative
 
 /*  ------------------------------------------------------------------------ */
 
@@ -46,7 +47,7 @@ class StackTracey {
 
             if (isParseableSyntaxError) {
                 
-                const rawLines = module.require ('util').inspect (originalInput).split ('\n')
+                const rawLines = nodeRequire ('util').inspect (originalInput).split ('\n')
                     , fileLine = rawLines[0].split (':')
                     , line = fileLine.pop ()
                     , file = fileLine.join (':')
