@@ -102,7 +102,7 @@ class StackTracey {
         fileRelative = externalDomainMatch ? externalDomainMatch[3] : fileRelative
 
         return [
-            nixSlashes(fileRelative.replace (/^.*\:\/\/?\/?/, '')), // cut webpack:/// and webpack:/ things
+            nixSlashes(fileRelative).replace (/^.*\:\/\/?\/?/, ''), // cut webpack:/// and webpack:/ things
             externalDomain
         ]
     }
