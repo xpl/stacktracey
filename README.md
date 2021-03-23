@@ -153,7 +153,7 @@ You can override the `isThirdParty` behavior by subclassing `StackTracey`:
 ```javascript
 class MyStackTracey extends StackTracey {
 
-    isThirdParty (path) {
+    isThirdParty (path, externalDomain) {    // you can use externalDomain to include traces from libs from other domains
         return (super.isThirdParty (path)    // include default behavior
                 || path.includes ('my-lib')) // paths including 'my-lib' will be marked as thirdParty
                 && !path.includes ('jquery') // jquery paths won't be marked as thirdParty
