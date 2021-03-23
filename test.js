@@ -300,7 +300,8 @@ describe ('StackTracey', () => {
         lines[1].indexOf      ('at callFn       mocha/lib/runnable.js:354').should.equal (0)
     })
 
-    it('parses "eval at" stuff', () => {
+    it ('parses "eval at" stuff', () => {
+
         function bar() {
             const entry = new StackTracey().items[1]
             entry.callee.should.equal('eval')
@@ -310,6 +311,24 @@ describe ('StackTracey', () => {
             eval('bar()')
         }
         foo()
+    })
+
+    it.only ('recognizes externalDomain', () => {
+
+        const stack =
+        [
+        'Error',
+        '    at foo (test.js:38:22)',
+        '    at bar (http://shmoogle.google.com/test.js:38:22)',
+        ].join ('\n')
+
+        const items = new StackTracey(stack).items
+
+        ;(items[0].externalDomain === undefined).should.be.true
+        items[1].externalDomain.should.equal('shmoogle.google.com')
+
+        items[0].isThirdParty.should.be.false
+        items[1].isThirdParty.should.be.true
     })
 })
 

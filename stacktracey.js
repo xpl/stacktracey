@@ -73,15 +73,20 @@ class StackTracey {
 
     extractEntryMetadata (e) {
 
-        const fileRelative = this.relativePath (e.file || '')
+        let fileRelative = this.relativePath (e.file || '')
+
+        const externalDomainMatch = fileRelative.match (/^.*\:\/\/?\/?(.+)\/(.*)/)
+        const externalDomain = externalDomainMatch ? externalDomainMatch[1] : undefined
+        fileRelative = externalDomainMatch ? externalDomainMatch[2] : fileRelative
 
         return O.assign (e, {
 
-            calleeShort:  e.calleeShort || lastOf ((e.callee || '').split ('.')),
-            fileRelative: fileRelative,
-            fileShort:    this.shortenPath (fileRelative),
-            fileName:     lastOf ((e.file || '').split ('/')),
-            thirdParty:   this.isThirdParty (fileRelative) && !e.index
+            calleeShort:    e.calleeShort || lastOf ((e.callee || '').split ('.')),
+            fileRelative:   fileRelative,
+            fileShort:      this.shortenPath (fileRelative),
+            fileName:       lastOf ((e.file || '').split ('/')),
+            thirdParty:     this.isThirdParty (fileRelative, externalDomain) && !e.index,
+            externalDomain: externalDomain
         })
     }
 
@@ -92,11 +97,12 @@ class StackTracey {
     }
 
     relativePath (fullPath) {
-        return nixSlashes (pathToRelative (pathRoot, fullPath)).replace (/^.*\:\/\/?\/?/, '')
+        return nixSlashes (pathToRelative (pathRoot, fullPath))
     }
 
-    isThirdParty (relativePath) {
-        return (relativePath[0] === '~')                          || // webpack-specific heuristic
+    isThirdParty (relativePath, externalDomain) {
+        return externalDomain ||
+               (relativePath[0] === '~')                          || // webpack-specific heuristic
                (relativePath[0] === '/')                          || // external source
                (relativePath.indexOf ('node_modules')      === 0) ||
                (relativePath.indexOf ('webpack/bootstrap') === 0)
