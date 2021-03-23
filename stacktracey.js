@@ -73,11 +73,9 @@ class StackTracey {
 
     extractEntryMetadata (e) {
 
-        let fileRelative = this.relativePath (e.file || '')
-
-        const externalDomainMatch = fileRelative.match (/^.*\:\/\/?\/?([^\/]+)\/(.*)/)
-        const externalDomain = externalDomainMatch ? externalDomainMatch[1] : undefined
-        fileRelative = externalDomainMatch ? externalDomainMatch[2] : fileRelative
+        const decomposedPath = this.decomposePath (e.file || '')
+        const fileRelative = decomposedPath[0]
+        const externalDomain = decomposedPath[1]
 
         return O.assign (e, {
 
@@ -96,8 +94,17 @@ class StackTracey {
                            .replace (/^__parcel_source_root\//, '')
     }
 
-    relativePath (fullPath) {
-        return nixSlashes (pathToRelative (pathRoot, fullPath))
+    decomposePath (fullPath) {
+        let fileRelative = pathToRelative (pathRoot, fullPath)
+
+        const externalDomainMatch = fileRelative.match (/^(http|https)\:\/\/?([^\/]+)\/(.*)/)
+        const externalDomain = externalDomainMatch ? externalDomainMatch[2] : undefined
+        fileRelative = externalDomainMatch ? externalDomainMatch[3] : fileRelative
+
+        return [
+            nixSlashes(fileRelative.replace (/^.*\:\/\/?\/?/, '')), // cut webpack:/// and webpack:/ things
+            externalDomain
+        ]
     }
 
     isThirdParty (relativePath, externalDomain) {

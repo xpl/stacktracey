@@ -49,7 +49,8 @@ describe ('StackTracey', () => {
             fileName: 'test.js',
             fileRelative: 'test.js',
             fileShort: 'test.js',
-            thirdParty: false
+            thirdParty: false,
+            externalDomain: undefined
         })
     })
 
@@ -200,11 +201,11 @@ describe ('StackTracey', () => {
 
     it ('computes relative path correctly', () => {
         
-        StackTracey.prototype.relativePath ('webpack:///~/jquery/dist/jquery.js')
-                             .should.equal (           '~/jquery/dist/jquery.js')
+        StackTracey.prototype.decomposePath ('webpack:///~/jquery/dist/jquery.js')
+                             .should.deep.equal (      ['~/jquery/dist/jquery.js', undefined])
 
-        StackTracey.prototype.relativePath ('webpack:/webpack/bootstrap')
-                             .should.equal (         'webpack/bootstrap')
+        StackTracey.prototype.decomposePath ('webpack:/webpack/bootstrap')
+                             .should.deep.equal (    ['webpack/bootstrap', undefined])
     })
 
     it ('computes short path correctly', () => {
