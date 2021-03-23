@@ -313,7 +313,7 @@ describe ('StackTracey', () => {
         foo()
     })
 
-    it.only ('recognizes externalDomain', () => {
+    it ('recognizes externalDomain', () => {
 
         const stack =
         [
