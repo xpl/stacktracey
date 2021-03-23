@@ -112,7 +112,8 @@ class StackTracey {
 
             let callee, fileLineColumn = [], native, planA, planB
 
-            if ((planA = line.match (/at (.+) \((.+)\)/)) ||
+            if ((planA = line.match (/at (.+) \(eval at .+ \((.+)\), .+\)/)) || // eval calls
+                (planA = line.match (/at (.+) \((.+)\)/)) ||
                 ((line.slice (0, 3) !== 'at ') && (planA = line.match (/(.*)@(.*)/)))) {
 
                 callee         =  planA[1]

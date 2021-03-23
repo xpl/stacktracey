@@ -300,6 +300,17 @@ describe ('StackTracey', () => {
         lines[1].indexOf      ('at callFn       mocha/lib/runnable.js:354').should.equal (0)
     })
 
+    it('parses "eval at" stuff', () => {
+        function bar() {
+            const entry = new StackTracey().items[1]
+            entry.callee.should.equal('eval')
+            entry.fileName.should.equal('test.js')
+        }
+        function foo() {
+            eval('bar()')
+        }
+        foo()
+    })
 })
 
 
