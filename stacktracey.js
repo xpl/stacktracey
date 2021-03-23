@@ -10,8 +10,7 @@ const O              = Object,
       partition      = require ('./impl/partition'),
       asTable        = require ('as-table'),
       nixSlashes     = x => x.replace (/\\/g, '/'),
-      pathRoot       = isBrowser ? window.location.href : (nixSlashes (process.cwd ()) + '/'),
-      pathToRelative = isBrowser ? ((root, full) => full.replace (root, '')) : nodeRequire ('path').relative
+      pathRoot       = isBrowser ? window.location.href : (nixSlashes (process.cwd ()) + '/')
 
 /*  ------------------------------------------------------------------------ */
 
@@ -95,16 +94,18 @@ class StackTracey {
     }
 
     decomposePath (fullPath) {
-        let fileRelative = pathToRelative (pathRoot, fullPath)
+        let result = fullPath
+        
+        if (isBrowser) result = result.replace (pathRoot, '')
 
-        console.log({ fileRelative, pathRoot, fullPath, match: fileRelative.match (/^(http|https)\:\/\/?([^\/]+)\/(.*)/) })
-
-        const externalDomainMatch = fileRelative.match (/^(http|https)\:\/\/?([^\/]+)\/(.*)/)
+        const externalDomainMatch = result.match (/^(http|https)\:\/\/?([^\/]+)\/(.*)/)
         const externalDomain = externalDomainMatch ? externalDomainMatch[2] : undefined
-        fileRelative = externalDomainMatch ? externalDomainMatch[3] : fileRelative
+        result = externalDomainMatch ? externalDomainMatch[3] : result
+
+        if (!isBrowser) result = nodeRequire ('path').relative (pathRoot, result)
 
         return [
-            nixSlashes(fileRelative).replace (/^.*\:\/\/?\/?/, ''), // cut webpack:/// and webpack:/ things
+            nixSlashes(result).replace (/^.*\:\/\/?\/?/, ''), // cut webpack:/// and webpack:/ things
             externalDomain
         ]
     }
