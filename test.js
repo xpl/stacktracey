@@ -319,7 +319,7 @@ describe ('StackTracey', () => {
         [
         'Error',
         '    at foo (test.js:38:22)',
-        '    at bar (http://shmoogle.google.com/test.js:38:22)',
+        '    at bar (http://shmoogle.google.com/hohoho/test.js:38:22)',
         ].join ('\n')
 
         const items = new StackTracey(stack).items
@@ -327,8 +327,10 @@ describe ('StackTracey', () => {
         ;(items[0].externalDomain === undefined).should.be.true
         items[1].externalDomain.should.equal('shmoogle.google.com')
 
-        items[0].isThirdParty.should.be.false
-        items[1].isThirdParty.should.be.true
+        items[0].thirdParty.should.be.false
+        items[1].thirdParty.should.be.true
+
+        items[1].fileRelative.should.equal('hohoho/test.js')
     })
 })
 

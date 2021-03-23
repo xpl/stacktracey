@@ -75,7 +75,7 @@ class StackTracey {
 
         let fileRelative = this.relativePath (e.file || '')
 
-        const externalDomainMatch = fileRelative.match (/^.*\:\/\/?\/?(.+)\/(.*)/)
+        const externalDomainMatch = fileRelative.match (/^.*\:\/\/?\/?([^\/]+)\/(.*)/)
         const externalDomain = externalDomainMatch ? externalDomainMatch[1] : undefined
         fileRelative = externalDomainMatch ? externalDomainMatch[2] : fileRelative
 
