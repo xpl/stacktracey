@@ -97,6 +97,8 @@ class StackTracey {
     decomposePath (fullPath) {
         let fileRelative = pathToRelative (pathRoot, fullPath)
 
+        console.log({ fileRelative, pathRoot, fullPath, match: fileRelative.match (/^(http|https)\:\/\/?([^\/]+)\/(.*)/) })
+
         const externalDomainMatch = fileRelative.match (/^(http|https)\:\/\/?([^\/]+)\/(.*)/)
         const externalDomain = externalDomainMatch ? externalDomainMatch[2] : undefined
         fileRelative = externalDomainMatch ? externalDomainMatch[3] : fileRelative
