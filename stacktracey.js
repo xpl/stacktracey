@@ -134,9 +134,10 @@ class StackTracey {
 
                 callee         =  planA[1]
                 native         = (planA[2] === 'native')
-                fileLineColumn = (planA[2].match (/(.*):(.+):(.+)/) || []).slice (1)
+                fileLineColumn = (planA[2].match (/(.*):(\d+):(\d+)/) ||
+                                  planA[2].match (/(.*):(\d+)/) || []).slice (1)
 
-            } else if ((planB = line.match (/^(at\s+)*(.+):([0-9]+):([0-9]+)/) )) {
+            } else if ((planB = line.match (/^(at\s+)*(.+):(\d+):(\d+)/) )) {
                 fileLineColumn = (planB).slice (2)
 
             } else {
