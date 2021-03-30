@@ -334,15 +334,13 @@ describe ('StackTracey', () => {
         items[1].fileRelative.should.equal('hohoho/test.js')
     })
 
-    it.only ('recognizes locations without column', () => {
+    it ('recognizes locations without column', () => {
         const stack = [
         'Error',
         '    at ValidateCompatibilityWithBindGroupLayout (../../third_party/dawn/src/dawn_native/ShaderModule.cpp:395)',
         ].join ('\n')
 
         const items = new StackTracey(stack).items
-
-        console.log(items)
 
         items[0].should.contain({
             callee: 'ValidateCompatibilityWithBindGroupLayout',
