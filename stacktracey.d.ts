@@ -39,7 +39,7 @@ declare class StackTracey {
     maxColumnWidths (): StackTracey.MaxColumnWidths
 
     static resetCache (): void
-    static locationsEqual (a: Location, b: Location): boolean
+    static locationsEqual (a: StackTracey.Location, b: StackTracey.Location): boolean
 }
 
 declare namespace StackTracey {
