@@ -1,7 +1,7 @@
 {
-  "name": "stacktracey",
-  "version": "2.1.8",
-  "description": "Parses call stacks. Reads sources. Clean & filtered output. Sourcemaps. Node & browsers.",
+  "name": "@sc3d/stacktracey",
+  "version": "2.1.9",
+  "description": "Friendly fork of stacktracey to fix bugs.",
   "main": "stacktracey",
   "types": "./stacktracey.d.ts",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xpl/stacktracey.git"
+    "url": "https://github.com/rrthomas/stacktracey.git"
   },
   "keywords": [
     "stack",
