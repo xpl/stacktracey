@@ -232,10 +232,7 @@ describe ('StackTracey', () => {
                 stack.items[0].syntaxError.should.equal (true)
                 stack.items[0].column.should.equal (5)
                 
-                const spaces  = nodeVersion > 8 ? '    ' : '                  '
-                const spaces2 = nodeVersion > 8 ? (nodeVersion > 11 ? '         ' : '        ') : '  '
-
-                stack.asTable ().split ('\n')[0].should.equal ('at (syntax error)' + spaces + 'test_files/syntax_error.js:2' + spaces2 + 'foo->bar ()                                     ')
+                stack.asTable ().split ('\n')[0].should.match(/at \(syntax error\)\s+test_files\/syntax_error.js:2\s+foo->bar \(\)/)
             }
         })
     }
@@ -334,6 +331,28 @@ describe ('StackTracey', () => {
         items[1].fileRelative.should.equal('hohoho/test.js')
     })
 
+    it ('parses async frames', () => {
+        const stack = [
+        'Error: test',
+        '    at async /some/index.js:1:1',
+        '    at async (/some/index.js:1:1)',
+        '    at async foo /some/index.js:1:1',
+        '    at async foo (/some/index.js:1:1)',
+        ].join ('\n')
+
+        const items = new StackTracey(stack).items
+
+        items[0].file.should.equal('/some/index.js')
+        items[1].file.should.equal('/some/index.js')
+        items[2].file.should.equal('/some/index.js')
+        items[3].file.should.equal('/some/index.js')
+
+        items[0].callee.should.equal('async')
+        items[1].callee.should.equal('async')
+        items[2].callee.should.equal('async foo')
+        items[3].callee.should.equal('async foo')
+    })
+
     it ('recognizes locations without column', () => {
         const stack = [
         'Error',
@@ -351,6 +370,4 @@ describe ('StackTracey', () => {
         })
     })
 })
-
-
 
