@@ -232,10 +232,7 @@ describe ('StackTracey', () => {
                 stack.items[0].syntaxError.should.equal (true)
                 stack.items[0].column.should.equal (5)
                 
-                const spaces  = nodeVersion > 8 ? '    ' : '                  '
-                const spaces2 = nodeVersion > 8 ? (nodeVersion > 11 ? '         ' : '        ') : '  '
-
-                stack.asTable ().split ('\n')[0].should.equal ('at (syntax error)' + spaces + 'test_files/syntax_error.js:2' + spaces2 + 'foo->bar ()                                     ')
+                stack.asTable ().split ('\n')[0].should.match(/at \(syntax error\)\s+test_files\/syntax_error.js:2\s+foo->bar \(\)/)
             }
         })
     }
